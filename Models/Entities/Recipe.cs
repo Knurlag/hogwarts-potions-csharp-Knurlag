@@ -1,17 +1,16 @@
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using HogwartsPotions.Models.Enums;
 
 namespace HogwartsPotions.Models.Entities
 {
-    public class Student
+    public class Recipe
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long ID { get; set; }
 
         public string Name { get; set; }
-        public HouseType HouseType { get; set; }
-        public PetType PetType { get; set; }
-        public Room Room { get; set; }
+
+        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
     }
 }
