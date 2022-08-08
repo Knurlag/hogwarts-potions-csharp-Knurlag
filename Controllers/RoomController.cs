@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using HogwartsPotions.Models;
 using HogwartsPotions.Models.Entities;
+using HogwartsPotions.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HogwartsPotions.Controllers
@@ -23,7 +26,7 @@ namespace HogwartsPotions.Controllers
         }
 
         [HttpPost]
-        public async  Task AddRoom([FromBody] Room room)
+        public async Task AddRoom([FromBody] Room room)
         {
             await _context.AddRoom(room);
         }
@@ -50,6 +53,42 @@ namespace HogwartsPotions.Controllers
         public async Task<List<Room>> GetRoomsForRatOwners()
         {
             return await _context.GetRoomsForRatOwners();
+        }
+
+        [HttpGet("/potions")]
+        public async Task<List<Potion>> GetAllPotions()
+        {
+            return await _context.GetAllPotions();
+        }
+
+        [HttpPost("/potions/{id}")]
+        public async Task<Potion> BrewPotion(long id, [FromBody] List<Ingredient> data)
+        {
+            return await _context.BrewPotion(id, data);
+        }
+
+        [HttpGet("/potions/{id}")]
+        public async Task<List<Potion>> GetAllPotionsOfStudent(long id)
+        {
+            return await _context.GetAllPotionsOfStudent(id);
+        }
+
+        [HttpPost("/potions/brew/{id}")]
+        public async Task<Potion> BrewPotionSlowly(long id)
+        {
+            return await _context.BrewPotionSlowly(id);
+        }
+
+        [HttpPut("/potions/{id}/add")]
+        public async Task<Potion> AddIngredient(long id, [FromBody] Ingredient ingredient)
+        {
+            return await _context.AddIngredientToPotion(id, ingredient);
+        }
+
+        [HttpGet("/potions/{id}/help")]
+        public async Task<List<Recipe>> GetHelp(long id)
+        {
+            return await _context.GetHelp(id);
         }
     }
 }
