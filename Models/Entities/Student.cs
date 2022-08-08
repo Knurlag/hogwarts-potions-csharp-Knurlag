@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using HogwartsPotions.Models.Enums;
 
@@ -12,6 +11,7 @@ namespace HogwartsPotions.Models.Entities
         public string Name { get; set; }
         public HouseType HouseType { get; set; }
         public PetType PetType { get; set; }
+        
         public Room Room { get; set; }
     }
 }
