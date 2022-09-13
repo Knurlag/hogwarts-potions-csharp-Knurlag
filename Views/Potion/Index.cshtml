@@ -1,0 +1,43 @@
+﻿@using HogwartsPotions.Controllers
+@using HogwartsPotions.Models.Entities
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                BrewingStatus
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (Potion item in ViewBag.Potions) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BrewingStatus)
+            </td>
+            <td>
+                <a asp-controller="Potion" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-controller="Potion" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-controller="Potion" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
