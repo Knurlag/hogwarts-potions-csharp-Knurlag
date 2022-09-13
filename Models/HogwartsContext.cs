@@ -19,6 +19,8 @@ namespace HogwartsPotions.Models
 
         public DbSet<Potion> Potions { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         public HogwartsContext(DbContextOptions<HogwartsContext> options) : base(options)
         {
         }
@@ -29,6 +31,7 @@ namespace HogwartsPotions.Models
             modelBuilder.Entity<Ingredient>().ToTable("Ingredients");
             modelBuilder.Entity<Recipe>().ToTable("Recipes");
             modelBuilder.Entity<Potion>().ToTable("Potions");
+            modelBuilder.Entity<User>().ToTable("Potions");
 
         }
 
@@ -99,7 +102,7 @@ namespace HogwartsPotions.Models
 
         public async Task<List<Potion>> GetAllPotions()
         {
-            return await Potions.Include(potion => potion.Ingredients).Include(potion => potion.BrewerStudent).ToListAsync();
+            return await Potions.Include(potion => potion.Recipe).Include(potion => potion.BrewerStudent).ToListAsync();
         }
 
         public Task<Potion> BrewPotion(long id, List<Ingredient> ingredients)
@@ -126,16 +129,17 @@ namespace HogwartsPotions.Models
             }
 
 
-            var name = $"{student.Name}'s Discovery #{GetAllPotionsOfStudent(student.ID).Result.Count + 1}";
-            var potion = new Potion { BrewerStudent = student, BrewingStatus = status, Ingredients = ingredients, Name = name };
+            var name = $"{student.Name}'s Discovery #{GetAllPotionsOfStudent(student.ID, BrewingStatus.Discovery).Result.Count + 1}";
+            var potionRecipe = new Recipe { Ingredients = ingredients, Name = name };
+            var potion = new Potion { BrewerStudent = student, BrewingStatus = status, Recipe = potionRecipe, Name = name };
             if (status == BrewingStatus.Discovery)
             {
-                var recipe = new Recipe { Ingredients = ingredients, Name = name };
-                Potions.Add(potion);
-                Recipes.Add(recipe);
+                
+                Potions.Add(potion); 
+                Recipes.Add(potionRecipe);
                 SaveChanges();
             }
-            potion.Name = $"{student.Name}'s Replica #{GetAllPotionsOfStudent(student.ID).Result.Count + 1}";
+            potion.Name = $"{student.Name}'s Replica #{GetAllPotionsOfStudent(student.ID, BrewingStatus.Replica).Result.Count + 1}";
             Potions.Add(potion);
             SaveChanges();
             return Task.FromResult(potion);
@@ -144,14 +148,17 @@ namespace HogwartsPotions.Models
 
         }
 
-        public Task<List<Potion>> GetAllPotionsOfStudent(long id)
+        public Task<List<Potion>> GetAllPotionsOfStudent(long id, BrewingStatus status)
         {
             List<Potion> potionsOfStudent = new List<Potion>();
-            foreach (var potion in Potions.Include(potion => potion.BrewerStudent).Include(potion => potion.Ingredients))
+            foreach (var potion in Potions.Include(potion => potion.BrewerStudent).Include(potion => potion.Recipe))
             {
                 if (id == potion.BrewerStudent.ID)
                 {
-                    potionsOfStudent.Add(potion);
+                    if (potion.BrewingStatus == status)
+                    {
+                        potionsOfStudent.Add(potion);
+                    }
                 }
             }
             return Task.FromResult(potionsOfStudent);
@@ -170,11 +177,11 @@ namespace HogwartsPotions.Models
         {
 
             var potionToUpdate = await Potions.FirstOrDefaultAsync(p => p.ID == id);
-            if (potionToUpdate.Ingredients.Count == 5)
+            if (potionToUpdate.Recipe.Ingredients.Count == MaxIngredientsForPotions)
             {
                 foreach (var recipe in Recipes)
                 {
-                    if (potionToUpdate.Ingredients.Equals(recipe.Ingredients))
+                    if (potionToUpdate.Recipe.Ingredients.Equals(recipe.Ingredients))
                     {
                         potionToUpdate.BrewingStatus = BrewingStatus.Replica;
                         Update(potionToUpdate);
@@ -191,7 +198,7 @@ namespace HogwartsPotions.Models
             }
             else
             {
-                potionToUpdate.Ingredients.Add(ingredient);
+                potionToUpdate.Recipe.Ingredients.Add(ingredient);
                 Update(potionToUpdate);
                 await SaveChangesAsync();
             }
@@ -202,18 +209,18 @@ namespace HogwartsPotions.Models
         {
             var potion = await Potions.FirstOrDefaultAsync(p => p.ID == id);
             var recipesWithSameIngredients = new List<Recipe>();
-            if (potion.Ingredients.Count < 5)
+            if (potion.Recipe.Ingredients.Count < MaxIngredientsForPotions)
             {
 
                 foreach (var recipe in Recipes.Include(r => r.Ingredients))
                 {
                     var numOfSameIngredients = 0;
-                    foreach (var ingredient in potion.Ingredients)
+                    foreach (var ingredient in potion.Recipe.Ingredients)
                     {
                         if (recipe.Ingredients.Contains(ingredient))
                         {
                             numOfSameIngredients++;
-                            if (numOfSameIngredients <= potion.Ingredients.Count)
+                            if (numOfSameIngredients <= potion.Recipe.Ingredients.Count)
                             {
                                 recipesWithSameIngredients.Add(recipe);
                             }
@@ -225,6 +232,11 @@ namespace HogwartsPotions.Models
             }
 
             return recipesWithSameIngredients;
+        }
+
+        public bool ValidateLogin(User user)
+        {
+            return Users.Single(u => u.Username == user.Username && u.Password == user.Password).Username == user.Username;
         }
     }
 }
