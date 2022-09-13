@@ -15,9 +15,10 @@ namespace HogwartsPotions.Models.Entities
 
         public Student BrewerStudent { get; set; }
 
-        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+        public Recipe Recipe { get; set; }
 
         public BrewingStatus BrewingStatus { get; set; }
+
 
     }
 }
