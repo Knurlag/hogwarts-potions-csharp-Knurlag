@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace HogwartsPotions.Models.Entities
 {
@@ -11,6 +12,11 @@ namespace HogwartsPotions.Models.Entities
         public long ID { get; set; }
 
         public string Name { get; set; }
+
+
+        [JsonIgnore]
+        public HashSet<Recipe> Recipes { get; set; } = new();
+
 
     }
 }
