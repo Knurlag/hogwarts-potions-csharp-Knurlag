@@ -27,10 +27,11 @@ namespace HogwartsPotions
                 options.EnableSensitiveDataLogging();
             });
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddSession();
             services.AddControllersWithViews();
             services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
-            services.AddSession();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,7 +59,7 @@ namespace HogwartsPotions
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=User}/{action=Index}/{id?}");
+                    pattern: "{controller=Student}/{action=Index}/{id?}");
             });
         }
     }
