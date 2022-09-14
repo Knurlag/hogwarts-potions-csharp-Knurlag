@@ -19,7 +19,6 @@ namespace HogwartsPotions.Models
 
         public DbSet<Potion> Potions { get; set; }
 
-        public DbSet<User> Users { get; set; }
 
         public HogwartsContext(DbContextOptions<HogwartsContext> options) : base(options)
         {
@@ -31,7 +30,6 @@ namespace HogwartsPotions.Models
             modelBuilder.Entity<Ingredient>().ToTable("Ingredients");
             modelBuilder.Entity<Recipe>().ToTable("Recipes");
             modelBuilder.Entity<Potion>().ToTable("Potions");
-            modelBuilder.Entity<User>().ToTable("Potions");
 
         }
 
@@ -105,9 +103,8 @@ namespace HogwartsPotions.Models
             return await Potions.Include(potion => potion.Recipe).Include(potion => potion.BrewerStudent).ToListAsync();
         }
 
-        public Task<Potion> BrewPotion(long id, List<Ingredient> ingredients)
+        public Task<Potion> BrewPotion(Student student, List<Ingredient> ingredients)
         {
-            var student = Students.First(p => p.ID == id);
             var status = BrewingStatus.Discovery;
             foreach (var recipe in Recipes.Include(recipe => recipe.Ingredients))
             {
@@ -234,9 +231,32 @@ namespace HogwartsPotions.Models
             return recipesWithSameIngredients;
         }
 
-        public bool ValidateLogin(User user)
+        public bool ValidateLogin(Student user)
         {
-            return Users.Single(u => u.Username == user.Username && u.Password == user.Password).Username == user.Username;
+            return Students.Single(u => u.Name == user.Name && u.Password == user.Password).Name == user.Name;
+        }
+
+        private bool CheckRegistrationStatus(Student user)
+        {
+            var u = Students.FirstOrDefault(u => u.Name == user.Name);
+            return u == null;
+        }
+
+        public bool Register(Student user)
+        {
+            if (CheckRegistrationStatus(user))
+            {
+                Students.Add(user);
+                SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+        public Student GetStudent(string username)
+        {
+            return Students.First(p => p.Name == username); ;
         }
     }
 }
