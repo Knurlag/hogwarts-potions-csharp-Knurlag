@@ -1,22 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HogwartsPotions.Helpers;
 using HogwartsPotions.Models;
 using HogwartsPotions.Models.Entities;
+using HogwartsPotions.Models.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HogwartsPotions.Controllers
 {
-    public class UserController : Controller
+    public class StudentController : Controller
     {
         private readonly HogwartsContext _context;
 
-        public UserController(HogwartsContext context)
+        public StudentController(HogwartsContext context)
         {
             _context = context;
         }
         public IActionResult Index()
         {
+            ViewBag.HouseTypes = new HouseType[] {HouseType.Gryffindor, HouseType.Hufflepuff, HouseType.Ravenclaw, HouseType.Slytherin};
+            ViewBag.PetTypes = new PetType[] {PetType.Cat, PetType.Owl, PetType.Rat, PetType.None};
             return View();
         }
 
@@ -24,7 +28,7 @@ namespace HogwartsPotions.Controllers
         {
             string username = Request.Form["login-username"];
             string password = Request.Form["login-password"];
-            User user = new User() { Username = username, Password = password };
+            Student user = new Student() { Name = username, Password = password };
             if (_context.ValidateLogin(user))
             {
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
@@ -40,8 +44,14 @@ namespace HogwartsPotions.Controllers
         {
             string username = Request.Form["register-username"];
             string password = Request.Form["register-password"];
-            string email = Request.Form["register-email"];
-            User user = new User() { Username = username, Password = password,};
+            string houseType = Request.Form["register-houseType"];
+            string petType = Request.Form["register-petType"];
+            Student user = new Student() { Name = username, Password = password, HouseType = (HouseType)Enum.Parse(typeof(HouseType) , houseType), PetType = (PetType) Enum.Parse(typeof(PetType), petType)};
+            if (_context.Register(user))
+            {
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
+                return RedirectToAction("Index", "Student");
+            }
             var message = "User already exists!";
             HttpContext.Session.SetString("message", message);
             return RedirectToAction("Index");
@@ -50,8 +60,7 @@ namespace HogwartsPotions.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("username");
-            HttpContext.Session.Remove("cart");
-            return RedirectToAction("Index", "Product");
+            return RedirectToAction("Index", "Student");
         }
 
     }
