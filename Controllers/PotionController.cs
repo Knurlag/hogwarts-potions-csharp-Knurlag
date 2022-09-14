@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HogwartsPotions.Models;
 using HogwartsPotions.Models.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace HogwartsPotions.Controllers
 {
@@ -21,12 +22,11 @@ namespace HogwartsPotions.Controllers
         }
 
         // GET: Potion
+        [Route("Potion")]
         public async Task<IActionResult> Index()
         {
-
-            ViewBag.Potions =  _context.Potions.ToList();
-            ViewBag.Ingredients = _context.Ingredients.ToList();
-            return View();
+            
+            return View(await _context.Potions.ToListAsync());
         }
 
         // GET: Potion/Details/5
@@ -38,7 +38,7 @@ namespace HogwartsPotions.Controllers
             }
 
             var potion = await _context.Potions
-                .Include(p=> p.Recipe.Ingredients)
+                .Include(p => p.Recipe.Ingredients)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (potion == null)
@@ -53,6 +53,7 @@ namespace HogwartsPotions.Controllers
         public IActionResult Create()
         {
             ViewBag.Ingredients = _context.Ingredients.ToList();
+            ViewBag.Username = HttpContext.Session.GetString("username")?.Replace("\"", "");
             return View();
         }
 
@@ -61,15 +62,16 @@ namespace HogwartsPotions.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,BrewingStatus")] Potion potion)
+        public async Task<IActionResult> Create(List<Ingredient> ingredients)
         {
+            var username = HttpContext.Session.GetString("username")?.Replace("\"", "");
+            var student = _context.GetStudent(username);
             if (ModelState.IsValid)
             {
-                _context.Add(potion);
-                await _context.SaveChangesAsync();
+                _context.BrewPotion(student, ingredients);
                 return RedirectToAction(nameof(Index));
             }
-            return View(potion);
+            return View();
         }
 
         // GET: Potion/Edit/5
@@ -155,14 +157,15 @@ namespace HogwartsPotions.Controllers
             {
                 _context.Potions.Remove(potion);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PotionExists(long id)
         {
-          return _context.Potions.Any(e => e.ID == id);
+            return _context.Potions.Any(e => e.ID == id);
         }
     }
 }
+
