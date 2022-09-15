@@ -54,30 +54,28 @@ namespace HogwartsPotions.Controllers
         // GET: Potion/Create
         public IActionResult Create()
         {
-            //ViewBag.Ingredients = _context.Ingredients.ToList();
             ViewBag.Ingredients = new MultiSelectList(_context.Ingredients.ToList(),
                 "Name", "Name");
             ViewBag.Username = HttpContext.Session.GetString("username")?.Replace("\"", "");
             return View();
         }
-        //, new[] { "Abraxan hair", "Wolfsbane", "Acromantula venom", "Adder's Fork", "African Red Pepper" }
+
     // POST: Potion/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Ingredients")] FakePotion potion)
+        public async Task<IActionResult> Create([Bind("Ingredients")] IngredientListView ingredientList)
         {
-            _context.GetIngredientlistByName(potion.Ingredients);
+            List<Ingredient> ingredients = _context.GetIngredientlistByName(ingredientList.Ingredients);
             var username = HttpContext.Session.GetString("username")?.Replace("\"", "");
             var student = _context.GetStudent(username);
-            List<Ingredient> sajt = new List<Ingredient>();
             if (ModelState.IsValid)
             {
-                _context.BrewPotion(student, sajt);
+                _context.BrewPotion(student, ingredients);
                 return RedirectToAction(nameof(Index));
             }
-            return View(potion);
+            return View(ingredientList);
         }
 
         // GET: Potion/Edit/5
