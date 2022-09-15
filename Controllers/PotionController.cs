@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -38,40 +39,45 @@ namespace HogwartsPotions.Controllers
             }
 
             var potion = await _context.Potions
-                .Include(p => p.Recipe.Ingredients)
+                .Include(p => p.Ingredients)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (potion == null)
             {
                 return NotFound();
             }
-            ViewBag.Ingredients = potion.Recipe.Ingredients;
+
+            ViewBag.Ingredients = potion.Ingredients; 
             return View(potion);
         }
 
         // GET: Potion/Create
         public IActionResult Create()
         {
-            ViewBag.Ingredients = _context.Ingredients.ToList();
+            //ViewBag.Ingredients = _context.Ingredients.ToList();
+            ViewBag.Ingredients = new MultiSelectList(_context.Ingredients.ToList(),
+                "Name", "Name");
             ViewBag.Username = HttpContext.Session.GetString("username")?.Replace("\"", "");
             return View();
         }
-
-        // POST: Potion/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        //, new[] { "Abraxan hair", "Wolfsbane", "Acromantula venom", "Adder's Fork", "African Red Pepper" }
+    // POST: Potion/Create
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(List<Ingredient> ingredients)
+        public async Task<IActionResult> Create([Bind("Ingredients")] FakePotion potion)
         {
+            _context.GetIngredientlistByName(potion.Ingredients);
             var username = HttpContext.Session.GetString("username")?.Replace("\"", "");
             var student = _context.GetStudent(username);
+            List<Ingredient> sajt = new List<Ingredient>();
             if (ModelState.IsValid)
             {
-                _context.BrewPotion(student, ingredients);
+                _context.BrewPotion(student, sajt);
                 return RedirectToAction(nameof(Index));
             }
-            return View();
+            return View(potion);
         }
 
         // GET: Potion/Edit/5
