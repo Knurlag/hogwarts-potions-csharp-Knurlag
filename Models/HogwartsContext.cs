@@ -128,13 +128,14 @@ namespace HogwartsPotions.Models
 
             var name = $"{student.Name}'s Discovery #{GetAllPotionsOfStudent(student.ID, BrewingStatus.Discovery).Result.Count + 1}";
             var potionRecipe = new Recipe { Ingredients = ingredients, Name = name };
-            var potion = new Potion { BrewerStudent = student, BrewingStatus = status, Recipe = potionRecipe, Name = name };
+            var potion = new Potion { BrewerStudent = student, Ingredients = ingredients, BrewingStatus = status, Recipe = potionRecipe, Name = name };
             if (status == BrewingStatus.Discovery)
             {
                 
                 Potions.Add(potion); 
                 Recipes.Add(potionRecipe);
                 SaveChanges();
+                return Task.FromResult(potion);
             }
             potion.Name = $"{student.Name}'s Replica #{GetAllPotionsOfStudent(student.ID, BrewingStatus.Replica).Result.Count + 1}";
             Potions.Add(potion);
@@ -257,6 +258,17 @@ namespace HogwartsPotions.Models
         public Student GetStudent(string username)
         {
             return Students.First(p => p.Name == username); ;
+        }
+
+        public List<Ingredient> GetIngredientlistByName(List<string> potionIngredients)
+        {
+            List<Ingredient> result = new List<Ingredient>();
+            foreach (var ingredient in potionIngredients)
+            {
+                result.Add(Ingredients.First(i => i.Name == ingredient));
+            }
+
+            return result;
         }
     }
 }
