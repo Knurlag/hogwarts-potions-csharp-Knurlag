@@ -54,8 +54,8 @@ namespace HogwartsPotions.Controllers
         // GET: Potion/Create
         public IActionResult Create()
         {
-            ViewBag.Ingredients = new MultiSelectList(_context.Ingredients.ToList(),
-                "Name", "Name");
+            ViewBag.Ingredients = _context.Ingredients.ToList();
+            //ViewBag.Ingredients = new MultiSelectList(_context.Ingredients.ToList(), "Name", "Name");
             ViewBag.Username = HttpContext.Session.GetString("username")?.Replace("\"", "");
             return View();
         }

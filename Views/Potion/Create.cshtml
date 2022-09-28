@@ -1,122 +1,63 @@
-﻿@using HogwartsPotions.Models.Entities
-
-@model HogwartsPotions.Models.Entities.FakePotion
+﻿@model HogwartsPotions.Models.Entities.IngredientListView
 
 @{
     ViewData["Title"] = "Create";
 }
-
+<!DOCTYPE html>
+<html>
 <head>
     <script src="~/lib/jquery/dist/jquery.min.js" ></script>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <meta name="viewport" content="width=device-width"/>
     <link rel="stylesheet" href="~/css/site.css"/>
-    <link rel="stylesheet" href="~/css/FormCSS.css"/>
-
+    <link rel="stylesheet" href="~/css/form.css"/>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true" defer></script>
-    @*<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css"
-          rel="stylesheet" type="text/css"/>
-    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css"
-          rel="stylesheet" type="text/css"/>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-        $(function() {
-            $('#Ingredients').multiselect({
-                includeSelectAllOption: true
-            });
-        });
-    </script>*@
-
 </head>
-<h1></h1>
+<body>
+<div class="background-container" style="background-image: url(/images/potioncreate.jpg);">
+    <h4>Potion</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group row">
+                    <label asp-for="Ingredients" class="control-label"></label><br/>
+                    <select asp-for="Ingredients" class="form-control" multiple="multiple">
+                        @foreach (var ing in ViewBag.Ingredients) {
+                            <option value="@ing.Name">@ing.Name, </option>
+                        }
+                    </select>
 
-<h4>Potion</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @*            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>*@
-@*        <div class="form-group">
-            <label asp-for="Ingredients" class="control-label"></label>
-            <select asp-for="Ingredients" class="form-control">
-                <option value="@ViewBag.Ingredients[0].Name">
-                    @ViewBag.Ingredients[0].Name
-                </option>
-            </select>
-            <span asp-validation-for="Ingredients" class="text-danger"></span>
-        </div>*@
-        @*            <div class="form-group"> <select asp-for="Ingredients" id="Ingredients" multiple="multiple" class="form-control required name="Ingredients">  
-                @if (ViewBag.Ingredients != null)  
-                {  
-                    foreach (var item in ViewBag.Ingredients)  
-                    {  
-                        if (item.Name != null)  
-                        {  
-                            <option value="@item.ID">  
-                                @item.Name  
-                            </option>  
-                        }  
-                    }  
-                }  
-            </select> </div>  *@
-@*        <div class="form-group">
-            @Html.ListBox("Ingredients", (MultiSelectList)ViewBag.Ingredients, new { @class = "multiselect", multiple = "multiple", id = "Ingredients" })
-        </div>*@
-        <div class="form-group">
-            <label asp-for="Ingredients" class="control-label"></label><br/>
-            <select asp-for="Ingredients" class="form-control" multiple="multiple" asp-items="@ViewBag.Ingredients" ></select>
-            <span asp-validation-for="Ingredients" class="text-danger"></span>
+                    <span asp-validation-for="Ingredients" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
         </div>
+    </div>
 
-@*        @foreach (Ingredient ing in ViewBag.Ingredients) {
-            <option value="@ing">@ing.Name</option>
-        }*@
-
-
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</body>
+</html>
 <script type="text/javascript">
-    //$(document).ready(function() {
-    //    $('body').on('change', 'select', function(){
-    //        console.log('changed');
-    //    });
-    //});
-    //$('select').change(function () {
-    //    console.log("BBBBBBB");
-    //    if($(this).val().length > 3) {
-    //        console.log("AAAAA");
-    //    }
-    //});
+
     $('option').mousedown(function(e) {
         e.preventDefault();
         if ($(this).prop('selected') === false) 
         {
             if($('select').val().length === 5) 
             {
-                console.log("asdad");
                 return false;
             }
         }
-        console.log(document.querySelectorAll('[selected]:not([selected="false"])').length);
         var originalScrollTop = $(this).parent().scrollTop();
-        console.log(originalScrollTop);
         $(this).prop('selected', $(this).prop('selected') ? false : true);
         var self = this;
         $(this).parent().focus();
@@ -127,7 +68,8 @@
         return false;
     });
 </script>
+
 @section Scripts {
 
-   @* @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}*@
+   @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
