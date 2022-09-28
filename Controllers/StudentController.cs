@@ -32,7 +32,7 @@ namespace HogwartsPotions.Controllers
             if (_context.ValidateLogin(user))
             {
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
-                return RedirectToAction("Index", "Potion");
+                return RedirectToAction("Index", "Home");
             }
 
             var message = "Please enter the correct credentials!";
