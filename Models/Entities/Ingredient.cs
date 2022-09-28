@@ -16,6 +16,8 @@ namespace HogwartsPotions.Models.Entities
 
         [JsonIgnore]
         public HashSet<Recipe> Recipes { get; set; } = new();
+        [JsonIgnore]
+        public HashSet<Potion> Potions { get; set; } = new();
 
 
     }
