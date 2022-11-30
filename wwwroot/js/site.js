@@ -19,3 +19,42 @@ registerButton.addEventListener('click', () => {
     registerForm.removeAttribute('hidden');
     warning.innerHTML = "";
 });
+
+function SearchIngredient() {
+    var ingredients = document.getElementsByTagName("option");
+    var searchText = document.getElementById('searchBar').value.toLowerCase();
+
+    for (var i = 0; i < ingredients.length; i++) {
+        if (!ingredients[i].value.toLowerCase().includes(searchText)) {
+            ingredients[i].style.display = "none";
+        }
+        else {
+            ingredients[i].style.display = "block";
+        };
+    }
+    return false;
+};
+
+function showIngredients() {
+    let ingredientsList = document.querySelector('#ingredients');
+    let backToClassButton = document.querySelector('.back-to-class');
+    let createButton = document.querySelector('#create');
+    if (ingredientsList.style.display === "none") {
+        ingredientsList.style.display = "block";
+        backToClassButton.style.display = "none";
+        createButton.style.display = "none";
+        document.getElementById("createDiv").style.zIndex = -999;
+    } else {
+        ingredientsList.style.display = "none";
+        backToClassButton.style.display = "block";
+        createButton.style.display = "block";
+        document.getElementById("createDiv").style.zIndex = 999;
+    }
+}
+
+
+function Alert() {
+    if (document.getElementById("create").hasAttribute("disabled")) {
+        alert("Select 5 ingredients");
+    };
+}
