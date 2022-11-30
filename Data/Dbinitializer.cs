@@ -55,7 +55,7 @@ namespace HogwartsPotions.data
 
             var ingredients = new Ingredient[]
             {
-                new Ingredient {Name = "Abraxan hair"}, new Ingredient {Name = "Wolfsbane"}, new Ingredient {Name = "Acromantula venom"},
+                new Ingredient {Name = "Abraxan hair"}, new Ingredient {Name = "Acromantula venom"},
                 new Ingredient {Name = "Adder's Fork"}, new Ingredient {Name = "African Red Pepper"}, new Ingredient {Name = "African Sea Salt"},
                 new Ingredient {Name = "Agrippa"}, new Ingredient {Name = "Alcohol"}, new Ingredient {Name = "Alihotsy"},
                 new Ingredient {Name = "Angel's Trumpet"}, new Ingredient {Name = "Anjelica"}, new Ingredient {Name = "Antimony"},
@@ -149,7 +149,7 @@ namespace HogwartsPotions.data
                 new Ingredient {Name = "Wartizome"},new Ingredient {Name = "Water"},new Ingredient {Name = "White spirit"},
                 new Ingredient {Name = "White Wine"},new Ingredient {Name = "Wiggenbush"},new Ingredient {Name = "Wiggenbush bark"},
                 new Ingredient {Name = "Wiggentree"},new Ingredient {Name = "Wiggentree bark"},new Ingredient {Name = "Witch's Ganglion"},
-                new Ingredient {Name = "Witches' Mummy"},new Ingredient {Name = "Woodlice Extract 63"},new Ingredient {Name = "Wood louse"},
+                new Ingredient {Name = "Witches' Mummy"}, new Ingredient {Name = "Wolfsbane"},new Ingredient {Name = "Woodlice Extract 63"},new Ingredient {Name = "Wood louse"},
                 new Ingredient {Name = "Wool of Bat"},new Ingredient {Name = "Wormwood"},new Ingredient {Name = "Wormwood Essence"}
 
 
