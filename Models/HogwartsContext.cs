@@ -127,7 +127,7 @@ namespace HogwartsPotions.Models
 
 
             var name = $"{student.Name}'s Discovery #{GetAllPotionsOfStudent(student.ID, BrewingStatus.Discovery).Result.Count + 1}";
-            var potionRecipe = new Recipe { Ingredients = ingredients, Name = name };
+            var potionRecipe = new Recipe { Ingredients = ingredients, Name = name, Student = student};
             var potion = new Potion { BrewerStudent = student, Ingredients = ingredients, BrewingStatus = status, Recipe = potionRecipe, Name = name };
             if (status == BrewingStatus.Discovery)
             {
@@ -234,7 +234,7 @@ namespace HogwartsPotions.Models
 
         public bool ValidateLogin(Student user)
         {
-            return Students.Single(u => u.Name == user.Name && u.Password == user.Password).Name == user.Name;
+            return Students.Any(u => u.Name == user.Name && u.Password == user.Password);
         }
 
         private bool CheckRegistrationStatus(Student user)
