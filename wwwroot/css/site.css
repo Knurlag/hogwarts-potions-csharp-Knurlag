@@ -81,13 +81,12 @@ li {
     float: left;
 }
 
-select {
+.register-select {
     padding: 0;
     padding-left: 1px;
     border: none;
-    background-color: #eee;
-    width: 100vw;
-    height: 200px;
+    width: 10vw;
+    height: 35px;
 }
 
 option {
@@ -110,33 +109,12 @@ ul {
     background-repeat: no-repeat;
 }
 
-.quote-container {
-    width: 100%;
-    height: 100%;
-}
-
-.quote {
-    margin-left: 5%;
-    font-size: 26px;
-    font-family: 'Source Serif Pro', serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: lightgray;
-    line-height: 40px;
-    position: absolute;
-    top: 200px;
-    left: 290px;
-}
 
 .welcome-button {
     position: absolute;
     margin-top: 500px;
     text-decoration: none;
     color: lightslategrey;
-    border-radius: 10px;
-    border: 1px solid;
-    margin-right: 80px;
 }
 
 a:hover, a:visited, a:link, a:active {
@@ -151,24 +129,45 @@ a:hover, a:visited, a:link, a:active {
 
 .create {
     position: absolute;
-    top: 270px;
-    left: 335px;
+    top: 45%;
+    left: 25%;
     font-size: 24px;
     letter-spacing: 1px;
 }
 
+.create-potion {
+    position: absolute;
+    top: 60%;
+    left: 72%;
+    font-size: 40px;
+    letter-spacing: 2px;
+    color: antiquewhite;
+    font-family: potter;
+    line-height: 39px !important;
+}
+
+.back-to-class {
+    position: absolute;
+    top: 24%;
+    left: 52%;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: antiquewhite;
+    font-family: potter;
+}
+
 .recipes {
     position: absolute;
-    top: 280px;
-    left: 927px;
+    top: 41%;
+    left: 61%;
     font-size: 24px;
     letter-spacing: 2px;
 }
 
 .potions {
     position: absolute;
-    top: 162px;
-    left: 1300px;
+    top: 15%;
+    left: 85%;
     font-size: 24px;
     letter-spacing: 2px;
 }
@@ -186,10 +185,8 @@ a:hover, a:visited, a:link, a:active {
     border-color: transparent;
     box-shadow: rgba(0, 0, 0, .2) 15px 28px 25px -18px;
     box-sizing: border-box;
-    color: black;
     cursor: pointer;
     display: inline-block;
-    font-family: Neucha, sans-serif;
     line-height: 2px;
     outline: none;
     padding: .75rem;
@@ -220,4 +217,91 @@ input {
 .login-button {
     font-family: potter;
     border-color: black;
+}
+
+.create-group {
+    position: absolute;
+    left: 30%;
+    right: 1%;
+    bottom: 1%;
+    height: -webkit-fill-available;
+    max-height: 85%;
+    background-position: center center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    font-size: 15px;
+    font-family: potter;
+    width: 54vw;
+    letter-spacing: 1px;
+    margin-right: 20px;
+}
+
+.potions-site {
+    margin: 6px;
+}
+
+.edit-site {
+    margin: 10px;
+}
+
+.delete-site {
+    margin: 6px;
+}
+
+.details-site {
+    margin: 6px;
+    margin-top: -13px;
+}
+
+.edit-h1 {
+    line-height: 2;
+}
+
+#ingredients {
+    display: none;
+}
+
+#ingredientsButton {
+    font-size: 35px;
+    color: antiquewhite;
+    font-family: potter;
+    top: 58%;
+    left: -7.5%;
+    position: absolute;
+}
+
+#searchBar {
+    position: absolute;
+    top: 9.8%;
+    left: 29%;
+    border-radius: 8px;
+    background: inherit;
+    border-color: antiquewhite;
+    color: antiquewhite;
+}
+
+.table-scroll {
+    height: 90%;
+    overflow-y: scroll;
+    margin-top: 20px;
+}
+
+.sticky-footer {
+    height: 10%;
+    margin-left: 10px;
+}
+
+.alert-div {
+    width: 150px;
+    height: 70px;
+}
+
+#edit-input {
+    background-color: antiquewhite;
+    max-width: 60%
+}
+
+#warning {
+    color: antiquewhite;
+    letter-spacing: 2px;
 }
