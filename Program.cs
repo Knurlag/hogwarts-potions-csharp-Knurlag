@@ -1,6 +1,7 @@
 using System;
 using HogwartsPotions.data;
 using HogwartsPotions.Models;
+using log4net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,10 +13,10 @@ namespace HogwartsPotions
     {
         public static void Main(string[] args)
         {
+
             var host = CreateHostBuilder(args).Build();
-
             CreateDbIfNotExists(host);
-
+            throw new Exception("testing");
             host.Run();
         }
 
