@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using HogwartsPotions.data;
 using HogwartsPotions.Models;
 using log4net;
@@ -6,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HogwartsPotions
 {
@@ -13,10 +17,17 @@ namespace HogwartsPotions
     {
         public static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
+                var exception = (Exception)e.ExceptionObject;
+                ILog logger = LogManager.GetLogger("logger");
+                logger.Error(exception);
 
+            };
             var host = CreateHostBuilder(args).Build();
             CreateDbIfNotExists(host);
-            throw new Exception("testing");
+
+            
             host.Run();
         }
 
