@@ -1,60 +1,53 @@
-﻿using HogwartsPotions.Helpers;
-using NSubstitute;
-using NUnit.Framework;
-using System;
+﻿using Newtonsoft.Json;
+using System.Text;
 
 namespace BackendTests.Helpers
 {
     [TestFixture]
     public class SessionHelperTests
     {
-
+        
+        private ISession session = new MockHttpSession();
+        const string key = "username";
 
         [SetUp]
         public void SetUp()
         {
-
         }
 
-        private SessionHelper CreateSessionHelper()
-        {
-            return new SessionHelper();
-        }
 
         [Test]
-        public void SetObjectAsJson_StateUnderTest_ExpectedBehavior()
+        public void GetObjectFromJson_Test()
         {
-            // Arrange
-            var sessionHelper = this.CreateSessionHelper();
-            ISession session = null;
-            string key = null;
-            object value = null;
-
-            // Act
-            sessionHelper.SetObjectAsJson(
+            SessionHelper.SetObjectAsJson(
                 session,
                 key,
-                value);
-
+                "AA");
+            // Act
+            var result = SessionHelper.GetObjectFromJson<string>(
+                session,
+                key);
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo("AA")) ;
         }
 
         [Test]
-        public void GetObjectFromJson_StateUnderTest_ExpectedBehavior()
+        public void SetObjectAsJson_Test()
         {
-            // Arrange
-            var sessionHelper = this.CreateSessionHelper();
-            ISession session = null;
-            string key = null;
+
+            object value = "AA";
 
             // Act
-            var result = sessionHelper.GetObjectFromJson(
+            SessionHelper.SetObjectAsJson(
+                session,
+                key,
+            value);
+
+            var result = SessionHelper.GetObjectFromJson<string>(
                 session,
                 key);
-
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo("AA"));
         }
     }
 }
