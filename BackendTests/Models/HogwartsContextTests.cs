@@ -122,7 +122,7 @@
             // Arrange
             var hogwartsContext = this.CreateHogwartsContext();
             Student student = null;
-            List ingredients = null;
+            var ingredients = new List<Ingredient>();
 
             // Act
             var result = await hogwartsContext.BrewPotion(
@@ -247,7 +247,7 @@
         {
             // Arrange
             var hogwartsContext = this.CreateHogwartsContext();
-            List potionIngredients = null;
+            var potionIngredients = new List<string>();
 
             // Act
             var result = hogwartsContext.GetIngredientlistByName(

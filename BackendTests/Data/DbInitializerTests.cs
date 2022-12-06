@@ -1,9 +1,4 @@
-﻿using HogwartsPotions.data;
-using NSubstitute;
-using NUnit.Framework;
-using System;
-
-namespace BackendTests.Data
+﻿namespace BackendTests.Data
 {
     [TestFixture]
     public class DbInitializerTests
@@ -16,20 +11,16 @@ namespace BackendTests.Data
 
         }
 
-        private DbInitializer CreateDbInitializer()
-        {
-            return new DbInitializer();
-        }
+
 
         [Test]
         public void Initialize_StateUnderTest_ExpectedBehavior()
         {
             // Arrange
-            var dbInitializer = this.CreateDbInitializer();
             HogwartsContext context = null;
 
             // Act
-            dbInitializer.Initialize(
+            DbInitializer.Initialize(
                 context);
 
             // Assert

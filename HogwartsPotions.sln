@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HogwartsPotions", "HogwartsPotions.csproj", "{041C6BB6-270F-48C0-8380-B9267D432B29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HogwartsPotions", "HogwartsPotions\HogwartsPotions.csproj", "{041C6BB6-270F-48C0-8380-B9267D432B29}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendTests", "BackendTests\BackendTests.csproj", "{9BBA5070-C9D8-406E-A0B3-1974D412F1B0}"
 EndProject
