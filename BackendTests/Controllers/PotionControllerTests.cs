@@ -25,7 +25,7 @@ namespace BackendTests.Controllers
         public async Task Details_Test()
         {
             // Arrange
-            long? id = 5;
+            long? id = 1;
             var potion =  context.HogwartsContext.Potions
                 .Include(p => p.Ingredients)
                 .FirstOrDefaultAsync(m => m.ID == id).Result;
@@ -36,68 +36,51 @@ namespace BackendTests.Controllers
             Assert.That(result, Is.EqualTo(potion));
         }
 
-        [Test]
-        public void Create_Test()
-        {
-            // Arrange
-            var result = subPotionController.Create();
-
-            // Assert
-            Assert.Fail();
-        }
 
         [Test]
-        public async Task Create_Test_1()
+        public async Task Create_Test_()
         {
             // Arrange
-            IngredientListView ingredientList = null;
+            var potions = context.HogwartsContext.GetAllPotions().Result;
+            IngredientListView ingredientList = new IngredientListView();
+            ingredientList.Ingredients = new List<string>{ "Alcohol", "Anjelica", "Belladonna", "Armotentia", "Asphodel" };
 
             // Act
-            var result = await subPotionController.Create(
-                ingredientList);
+            await subPotionController.Create(ingredientList);
 
             // Assert
-            Assert.Fail();
+            Assert.That(context.HogwartsContext.GetAllPotions().Result, Is.Not.EqualTo(potions));
         }
+
 
         [Test]
         public async Task Edit_Test()
         {
             // Arrange
-            long? id = null;
+            long id = 1;
+            
+            var potion = context.HogwartsContext.Potions
+                .Include(p => p.Ingredients)
+                .FirstOrDefaultAsync(m => m.ID == id).Result;
 
             // Act
-            var result = await subPotionController.Edit(
-                id);
-
+            potion.Name = "test";
+             await subPotionController.Edit(id, potion);
+            var resultpotion = context.HogwartsContext.Potions
+                .Include(p => p.Ingredients)
+                .FirstOrDefaultAsync(m => m.ID == id).Result;
             // Assert
-            Assert.Fail();
-        }
-
-        [Test]
-        public async Task Edit_Test_1()
-        {
-            // Arrange
-            long id = 0;
-            Potion potion = null;
-
-            // Act
-            var result = await subPotionController.Edit(
-                id,
-                potion);
-
-            // Assert
-            Assert.Fail();
+            Assert.That(resultpotion.Name, Is.EqualTo("test"));
         }
 
         [Test]
         public async Task Delete_Test()
         {
             // Arrange
-            long? id = null;
+            long? id = 1;
 
             // Act
-            var result = await subPotionController.Delete(
+            await subPotionController.Delete(
                 id);
 
             // Assert
@@ -116,6 +99,12 @@ namespace BackendTests.Controllers
 
             // Assert
             Assert.Fail();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            context.HogwartsContext.Database.EnsureDeleted();
         }
     }
 }
