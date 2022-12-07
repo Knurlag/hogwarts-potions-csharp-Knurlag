@@ -81,14 +81,14 @@
         {
             // Arrange
 
-            long id = 0;
+            long id = 1;
 
             // Act
             await subRoomController.DeleteRoomById(
                 id);
-
+            var result = context.HogwartsContext.GetRoom(id).Result;
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo(null));
         }
 
         [Test]
