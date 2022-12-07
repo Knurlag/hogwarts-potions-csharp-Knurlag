@@ -4,41 +4,37 @@
     public class RoomControllerTests
     {
         private HogwartsContext subHogwartsContext;
+        private RoomController subRoomController;
 
         [SetUp]
         public void SetUp()
         {
-            this.subHogwartsContext = Substitute.For<HogwartsContext>();
+            this.subHogwartsContext = Substitute.For<HogwartsContext>(Substitute.For<DbContextOptions<HogwartsContext>>());
+            this.subRoomController = new RoomController(subHogwartsContext);
         }
 
-        private RoomController CreateRoomController()
-        {
-            return new RoomController(
-                this.subHogwartsContext);
-        }
 
         [Test]
-        public async Task GetAllRooms_StateUnderTest_ExpectedBehavior()
+        public async Task GetAllRooms_Test()
         {
             // Arrange
-            var roomController = this.CreateRoomController();
 
             // Act
-            var result = await roomController.GetAllRooms();
+            var result = await subRoomController.GetAllRooms();
 
             // Assert
             Assert.Fail();
         }
 
         [Test]
-        public async Task AddRoom_StateUnderTest_ExpectedBehavior()
+        public async Task AddRoom_Test()
         {
             // Arrange
-            var roomController = this.CreateRoomController();
+
             Room room = null;
 
             // Act
-            await roomController.AddRoom(
+            await subRoomController.AddRoom(
                 room);
 
             // Assert
@@ -46,14 +42,14 @@
         }
 
         [Test]
-        public async Task GetRoomById_StateUnderTest_ExpectedBehavior()
+        public async Task GetRoomById_Test()
         {
             // Arrange
-            var roomController = this.CreateRoomController();
+
             long id = 0;
 
             // Act
-            var result = await roomController.GetRoomById(
+            var result = await subRoomController.GetRoomById(
                 id);
 
             // Assert
@@ -61,15 +57,15 @@
         }
 
         [Test]
-        public void UpdateRoomById_StateUnderTest_ExpectedBehavior()
+        public void UpdateRoomById_Test()
         {
             // Arrange
-            var roomController = this.CreateRoomController();
+
             long id = 0;
             Room updatedRoom = null;
 
             // Act
-            roomController.UpdateRoomById(
+            subRoomController.UpdateRoomById(
                 id,
                 updatedRoom);
 
@@ -78,14 +74,14 @@
         }
 
         [Test]
-        public async Task DeleteRoomById_StateUnderTest_ExpectedBehavior()
+        public async Task DeleteRoomById_Test()
         {
             // Arrange
-            var roomController = this.CreateRoomController();
+
             long id = 0;
 
             // Act
-            await roomController.DeleteRoomById(
+            await subRoomController.DeleteRoomById(
                 id);
 
             // Assert
@@ -93,13 +89,13 @@
         }
 
         [Test]
-        public async Task GetRoomsForRatOwners_StateUnderTest_ExpectedBehavior()
+        public async Task GetRoomsForRatOwners_Test()
         {
             // Arrange
-            var roomController = this.CreateRoomController();
+
 
             // Act
-            var result = await roomController.GetRoomsForRatOwners();
+            var result = await subRoomController.GetRoomsForRatOwners();
 
             // Assert
             Assert.Fail();
