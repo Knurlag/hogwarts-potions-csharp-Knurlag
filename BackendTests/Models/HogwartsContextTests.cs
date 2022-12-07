@@ -3,25 +3,22 @@
     [TestFixture]
     public class HogwartsContextTests
     {
-        private DbContextOptions<HogwartsContext> subDbContextOptions;
+
+        private HogwartsContext hogwartsContext;
 
         [SetUp]
         public void SetUp()
         {
-            this.subDbContextOptions = Substitute.For<DbContextOptions<HogwartsContext>>();
+
+            this.hogwartsContext = new HogwartsContext(Substitute.For<DbContextOptions<HogwartsContext>>());
         }
 
-        private HogwartsContext CreateHogwartsContext()
-        {
-            return new HogwartsContext(
-                this.subDbContextOptions);
-        }
 
         [Test]
-        public async Task AddRoom_StateUnderTest_ExpectedBehavior()
+        public async Task AddRoom_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
+
             Room room = null;
 
             // Act
@@ -33,10 +30,10 @@
         }
 
         [Test]
-        public async Task GetRoom_StateUnderTest_ExpectedBehavior()
+        public async Task GetRoom_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
+
             long roomId = 0;
 
             // Act
@@ -48,11 +45,8 @@
         }
 
         [Test]
-        public async Task GetAllRooms_StateUnderTest_ExpectedBehavior()
+        public async Task GetAllRooms_Test()
         {
-            // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
-
             // Act
             var result = await hogwartsContext.GetAllRooms();
 
@@ -61,10 +55,9 @@
         }
 
         [Test]
-        public async Task UpdateRoom_StateUnderTest_ExpectedBehavior()
+        public async Task UpdateRoom_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             Room room = null;
 
             // Act
@@ -76,10 +69,9 @@
         }
 
         [Test]
-        public async Task DeleteRoom_StateUnderTest_ExpectedBehavior()
+        public async Task DeleteRoom_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             long id = 0;
 
             // Act
@@ -91,11 +83,9 @@
         }
 
         [Test]
-        public async Task GetRoomsForRatOwners_StateUnderTest_ExpectedBehavior()
+        public async Task GetRoomsForRatOwners_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
-
             // Act
             var result = await hogwartsContext.GetRoomsForRatOwners();
 
@@ -104,11 +94,9 @@
         }
 
         [Test]
-        public async Task GetAllPotions_StateUnderTest_ExpectedBehavior()
+        public async Task GetAllPotions_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
-
             // Act
             var result = await hogwartsContext.GetAllPotions();
 
@@ -117,10 +105,9 @@
         }
 
         [Test]
-        public async Task BrewPotion_StateUnderTest_ExpectedBehavior()
+        public async Task BrewPotion_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             Student student = null;
             var ingredients = new List<Ingredient>();
 
@@ -134,10 +121,9 @@
         }
 
         [Test]
-        public async Task GetAllPotionsOfStudent_StateUnderTest_ExpectedBehavior()
+        public async Task GetAllPotionsOfStudent_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             long id = 0;
             BrewingStatus status = default(global::HogwartsPotions.Models.Enums.BrewingStatus);
 
@@ -151,10 +137,9 @@
         }
 
         [Test]
-        public async Task BrewPotionSlowly_StateUnderTest_ExpectedBehavior()
+        public async Task BrewPotionSlowly_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             long id = 0;
 
             // Act
@@ -166,10 +151,9 @@
         }
 
         [Test]
-        public async Task AddIngredientToPotion_StateUnderTest_ExpectedBehavior()
+        public async Task AddIngredientToPotion_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             long id = 0;
             Ingredient ingredient = null;
 
@@ -183,10 +167,9 @@
         }
 
         [Test]
-        public async Task GetHelp_StateUnderTest_ExpectedBehavior()
+        public async Task GetHelp_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             long id = 0;
 
             // Act
@@ -198,10 +181,9 @@
         }
 
         [Test]
-        public void ValidateLogin_StateUnderTest_ExpectedBehavior()
+        public void ValidateLogin_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             Student user = null;
 
             // Act
@@ -213,10 +195,9 @@
         }
 
         [Test]
-        public void Register_StateUnderTest_ExpectedBehavior()
+        public void Register_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             Student user = null;
 
             // Act
@@ -228,10 +209,9 @@
         }
 
         [Test]
-        public void GetStudent_StateUnderTest_ExpectedBehavior()
+        public void GetStudent_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             string username = null;
 
             // Act
@@ -243,10 +223,9 @@
         }
 
         [Test]
-        public void GetIngredientlistByName_StateUnderTest_ExpectedBehavior()
+        public void GetIngredientlistByName_Test()
         {
             // Arrange
-            var hogwartsContext = this.CreateHogwartsContext();
             var potionIngredients = new List<string>();
 
             // Act
