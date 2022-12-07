@@ -4,66 +4,50 @@
     public class StudentControllerTests
     {
         private HogwartsContext subHogwartsContext;
+        private StudentController subStudentController;
 
         [SetUp]
         public void SetUp()
         {
-            this.subHogwartsContext = Substitute.For<HogwartsContext>();
+            this.subHogwartsContext = Substitute.For<HogwartsContext>(Substitute.For<DbContextOptions<HogwartsContext>>());
+            this.subStudentController = new StudentController(subHogwartsContext);
         }
 
-        private StudentController CreateStudentController()
-        {
-            return new StudentController(
-                this.subHogwartsContext);
-        }
 
         [Test]
-        public void Index_StateUnderTest_ExpectedBehavior()
+        public void ValidateLogin_Test()
         {
             // Arrange
-            var studentController = this.CreateStudentController();
+
 
             // Act
-            var result = studentController.Index();
+            var result = subStudentController.ValidateLogin();
 
             // Assert
             Assert.Fail();
         }
 
         [Test]
-        public void ValidateLogin_StateUnderTest_ExpectedBehavior()
+        public void Register_Test()
         {
             // Arrange
-            var studentController = this.CreateStudentController();
+
 
             // Act
-            var result = studentController.ValidateLogin();
+            var result = subStudentController.Register();
 
             // Assert
             Assert.Fail();
         }
 
         [Test]
-        public void Register_StateUnderTest_ExpectedBehavior()
+        public void Logout_Test()
         {
             // Arrange
-            var studentController = this.CreateStudentController();
+
 
             // Act
-            var result = studentController.Register();
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Test]
-        public void Logout_StateUnderTest_ExpectedBehavior()
-        {
-            // Arrange
-            var studentController = this.CreateStudentController();
-
-            // Act
-            var result = studentController.Logout();
+            var result = subStudentController.Logout();
 
             // Assert
             Assert.Fail();
