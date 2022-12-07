@@ -77,22 +77,20 @@ namespace HogwartsPotions.Models
 
         public Task<List<Room>> GetRoomsForRatOwners()
         {
-            var goodRooms = new List<Room>();
-            foreach (var room in Rooms.Include(r => r.Residents).ToList())
+            
+            var goodRooms = Rooms.Include(r => r.Residents).ToList();
+            var allRooms = Rooms.Include(r => r.Residents).ToList();
+            foreach (var room in allRooms)
             {
-                if (room.Residents.Count == 0)
+                var petTypes = new List<PetType>();
+                foreach (var student in room.Residents)
                 {
-                    goodRooms.Add(room);
+                    petTypes.Add(student.PetType);
                 }
-                else
+
+                if (petTypes.Contains(PetType.Cat) || petTypes.Contains(PetType.Owl))
                 {
-                    foreach (var student in room.Residents)
-                    {
-                        if (student.PetType is PetType.None or PetType.Rat)
-                        {
-                            goodRooms.Add(room);
-                        }
-                    }
+                    goodRooms.Remove(room);
                 }
             }
             return Task.FromResult(goodRooms);
