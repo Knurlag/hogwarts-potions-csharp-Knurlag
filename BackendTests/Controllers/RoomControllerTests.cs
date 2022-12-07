@@ -32,14 +32,14 @@
         {
             // Arrange
 
-            Room room = null;
-
+            Room room = new Room();
+            var rooms = context.HogwartsContext.GetAllRooms().Result;
             // Act
             await subRoomController.AddRoom(
                 room);
-
+            var result = context.HogwartsContext.GetAllRooms().Result;
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.Not.EqualTo(rooms));
         }
 
         [Test]
