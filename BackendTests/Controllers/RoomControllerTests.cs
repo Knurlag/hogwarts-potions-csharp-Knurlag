@@ -47,14 +47,14 @@
         {
             // Arrange
 
-            long id = 0;
-
+            long id = 1;
+            var room = context.HogwartsContext.GetRoom(id).Result;
             // Act
             var result = await subRoomController.GetRoomById(
                 id);
 
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo(room));
         }
 
         [Test]
