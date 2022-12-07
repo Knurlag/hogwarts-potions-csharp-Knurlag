@@ -101,5 +101,11 @@
             // Assert
             Assert.Fail();
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            context.HogwartsContext.Database.EnsureDeleted();
+        }
     }
 }

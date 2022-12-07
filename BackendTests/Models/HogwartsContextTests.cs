@@ -235,5 +235,11 @@
             // Assert
             Assert.Fail();
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            hogwartsContext.Database.EnsureDeleted();
+        }
     }
 }
