@@ -126,14 +126,14 @@ namespace BackendTests.Models
         public void GetIngredientlistByName_Test()
         {
             // Arrange
-            var potionIngredients = new List<string>();
+            var potionIngredients = new List<string>{"Alcohol"};
 
             // Act
             var result = hogwartsContext.GetIngredientlistByName(
                 potionIngredients);
 
             // Assert
-            Assert.Fail();
+            Assert.That(result[0].Name, Is.EqualTo("Alcohol"));
         }
 
         [TearDown]
