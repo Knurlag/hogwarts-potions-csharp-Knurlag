@@ -19,12 +19,12 @@
         public async Task GetAllRooms_Test()
         {
             // Arrange
-
+            var rooms = context.HogwartsContext.GetAllRooms().Result;
             // Act
             var result = await subRoomController.GetAllRooms();
 
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo(rooms));
         }
 
         [Test]
