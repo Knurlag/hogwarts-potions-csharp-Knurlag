@@ -21,7 +21,7 @@ namespace HogwartsPotions
             {
                 var exception = (Exception)e.ExceptionObject;
                 ILog logger = LogManager.GetLogger("logger");
-                logger.Error(exception);
+                logger.Error("An error occurred", exception);
 
             };
             var host = CreateHostBuilder(args).Build();
@@ -44,8 +44,8 @@ namespace HogwartsPotions
                 }
                 catch (Exception ex)
                 {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred creating the DB.");
+                    ILog logger = LogManager.GetLogger("logger");
+                    logger.Error( "An error occurred creating the DB.", ex);
                 }
             }
         }
