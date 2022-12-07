@@ -5,40 +5,25 @@
     {
         private HogwartsContext subHogwartsContext;
 
+        private PotionController subPotionController;
+
         [SetUp]
         public void SetUp()
         {
-            this.subHogwartsContext = Substitute.For<HogwartsContext>();
+            this.subHogwartsContext = Substitute.For<HogwartsContext>(Substitute.For<DbContextOptions<HogwartsContext>>());
+            this.subPotionController = new PotionController(this.subHogwartsContext);
         }
 
-        private PotionController CreatePotionController()
-        {
-            return new PotionController(
-                this.subHogwartsContext);
-        }
+
 
         [Test]
-        public async Task Index_StateUnderTest_ExpectedBehavior()
+        public async Task Details_Test()
         {
             // Arrange
-            var potionController = this.CreatePotionController();
-
-            // Act
-            var result = await potionController.Index();
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Test]
-        public async Task Details_StateUnderTest_ExpectedBehavior()
-        {
-            // Arrange
-            var potionController = this.CreatePotionController();
             long? id = null;
 
             // Act
-            var result = await potionController.Details(
+            var result = await subPotionController.Details(
                 id);
 
             // Assert
@@ -46,27 +31,23 @@
         }
 
         [Test]
-        public void Create_StateUnderTest_ExpectedBehavior()
+        public void Create_Test()
         {
             // Arrange
-            var potionController = this.CreatePotionController();
-
-            // Act
-            var result = potionController.Create();
+            var result = subPotionController.Create();
 
             // Assert
             Assert.Fail();
         }
 
         [Test]
-        public async Task Create_StateUnderTest_ExpectedBehavior1()
+        public async Task Create_Test_1()
         {
             // Arrange
-            var potionController = this.CreatePotionController();
             IngredientListView ingredientList = null;
 
             // Act
-            var result = await potionController.Create(
+            var result = await subPotionController.Create(
                 ingredientList);
 
             // Assert
@@ -74,14 +55,13 @@
         }
 
         [Test]
-        public async Task Edit_StateUnderTest_ExpectedBehavior()
+        public async Task Edit_Test()
         {
             // Arrange
-            var potionController = this.CreatePotionController();
             long? id = null;
 
             // Act
-            var result = await potionController.Edit(
+            var result = await subPotionController.Edit(
                 id);
 
             // Assert
@@ -89,15 +69,14 @@
         }
 
         [Test]
-        public async Task Edit_StateUnderTest_ExpectedBehavior1()
+        public async Task Edit_Test_1()
         {
             // Arrange
-            var potionController = this.CreatePotionController();
             long id = 0;
             Potion potion = null;
 
             // Act
-            var result = await potionController.Edit(
+            var result = await subPotionController.Edit(
                 id,
                 potion);
 
@@ -106,14 +85,13 @@
         }
 
         [Test]
-        public async Task Delete_StateUnderTest_ExpectedBehavior()
+        public async Task Delete_Test()
         {
             // Arrange
-            var potionController = this.CreatePotionController();
             long? id = null;
 
             // Act
-            var result = await potionController.Delete(
+            var result = await subPotionController.Delete(
                 id);
 
             // Assert
@@ -121,14 +99,13 @@
         }
 
         [Test]
-        public async Task DeleteConfirmed_StateUnderTest_ExpectedBehavior()
+        public async Task DeleteConfirmed_Test()
         {
             // Arrange
-            var potionController = this.CreatePotionController();
             long id = 0;
 
             // Act
-            var result = await potionController.DeleteConfirmed(
+            var result = await subPotionController.DeleteConfirmed(
                 id);
 
             // Assert
