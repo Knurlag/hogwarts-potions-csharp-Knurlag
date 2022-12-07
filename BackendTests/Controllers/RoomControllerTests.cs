@@ -62,16 +62,18 @@
         {
             // Arrange
 
-            long id = 0;
-            Room updatedRoom = null;
+            long id = 1;
+            var room = context.HogwartsContext.GetRoom(id).Result;
+            Room updatedRoom = room;
+            updatedRoom.Capacity = 2;
 
             // Act
             subRoomController.UpdateRoomById(
                 id,
                 updatedRoom);
-
+            var result = context.HogwartsContext.GetRoom(id).Result;
             // Assert
-            Assert.Fail();
+            Assert.That(result.Capacity, Is.EqualTo(2));
         }
 
         [Test]
