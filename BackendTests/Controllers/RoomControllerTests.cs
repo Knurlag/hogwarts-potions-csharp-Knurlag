@@ -101,7 +101,7 @@
             var result = await subRoomController.GetRoomsForRatOwners();
 
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo(new List<Room>()));
         }
 
         [TearDown]
