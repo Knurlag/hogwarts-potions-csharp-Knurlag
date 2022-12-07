@@ -18,14 +18,6 @@ namespace BackendTests.Models
 
 
 
-
-
-
-
-
-
-
-
         [Test]
         public async Task BrewPotion_Test()
         {
@@ -78,7 +70,7 @@ namespace BackendTests.Models
         public async Task GetHelp_Test()
         {
             // Arrange
-            long id = 0;
+            long id = 1;
 
             // Act
             var result = await hogwartsContext.GetHelp(
@@ -92,28 +84,28 @@ namespace BackendTests.Models
         public void ValidateLogin_Test()
         {
             // Arrange
-            Student user = null;
+            Student user = hogwartsContext.GetStudent("Carson Alexander");
 
             // Act
             var result = hogwartsContext.ValidateLogin(
                 user);
 
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo(true));
         }
 
         [Test]
         public void Register_Test()
         {
             // Arrange
-            Student user = null;
+            Student user = hogwartsContext.GetStudent("Carson Alexander"); ;
 
             // Act
             var result = hogwartsContext.Register(
                 user);
 
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo(false));
         }
 
         [Test]
