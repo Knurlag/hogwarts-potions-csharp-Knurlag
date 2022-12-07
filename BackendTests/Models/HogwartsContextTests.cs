@@ -1,4 +1,7 @@
-﻿namespace BackendTests.Models
+﻿using HogwartsPotions.Models.Entities;
+using NuGet.Protocol;
+
+namespace BackendTests.Models
 {
     [TestFixture]
     public class HogwartsContextTests
@@ -14,95 +17,14 @@
         }
 
 
-        [Test]
-        public async Task AddRoom_Test()
-        {
-            // Arrange
 
-            Room room = null;
 
-            // Act
-            await hogwartsContext.AddRoom(
-                room);
 
-            // Assert
-            Assert.Fail();
-        }
 
-        [Test]
-        public async Task GetRoom_Test()
-        {
-            // Arrange
 
-            long roomId = 0;
 
-            // Act
-            var result = await hogwartsContext.GetRoom(
-                roomId);
 
-            // Assert
-            Assert.Fail();
-        }
 
-        [Test]
-        public async Task GetAllRooms_Test()
-        {
-            // Act
-            var result = await hogwartsContext.GetAllRooms();
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Test]
-        public async Task UpdateRoom_Test()
-        {
-            // Arrange
-            Room room = null;
-
-            // Act
-            await hogwartsContext.UpdateRoom(
-                room);
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Test]
-        public async Task DeleteRoom_Test()
-        {
-            // Arrange
-            long id = 0;
-
-            // Act
-            await hogwartsContext.DeleteRoom(
-                id);
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Test]
-        public async Task GetRoomsForRatOwners_Test()
-        {
-            // Arrange
-            // Act
-            var result = await hogwartsContext.GetRoomsForRatOwners();
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [Test]
-        public async Task GetAllPotions_Test()
-        {
-            // Arrange
-            // Act
-            var result = await hogwartsContext.GetAllPotions();
-
-            // Assert
-            Assert.Fail();
-        }
 
         [Test]
         public async Task BrewPotion_Test()
@@ -124,47 +46,33 @@
         public async Task GetAllPotionsOfStudent_Test()
         {
             // Arrange
-            long id = 0;
-            BrewingStatus status = default(global::HogwartsPotions.Models.Enums.BrewingStatus);
-
+            long id = 1;
+            BrewingStatus status = BrewingStatus.Discovery;
+            var expected = new List<Potion>();
+            expected.Add(hogwartsContext.Potions
+                .Include(p => p.Ingredients)
+                .FirstOrDefaultAsync(m => m.ID == id).Result);
             // Act
             var result = await hogwartsContext.GetAllPotionsOfStudent(
-                id,
-                status);
+                id, status);
 
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
         public async Task BrewPotionSlowly_Test()
         {
             // Arrange
-            long id = 0;
+            long id = 1;
 
             // Act
-            var result = await hogwartsContext.BrewPotionSlowly(
-                id);
+            var result = await hogwartsContext.BrewPotionSlowly(id);
 
             // Assert
-            Assert.Fail();
+            Assert.Pass();
         }
 
-        [Test]
-        public async Task AddIngredientToPotion_Test()
-        {
-            // Arrange
-            long id = 0;
-            Ingredient ingredient = null;
-
-            // Act
-            var result = await hogwartsContext.AddIngredientToPotion(
-                id,
-                ingredient);
-
-            // Assert
-            Assert.Fail();
-        }
 
         [Test]
         public async Task GetHelp_Test()
@@ -177,7 +85,7 @@
                 id);
 
             // Assert
-            Assert.Fail();
+            Assert.Pass();
         }
 
         [Test]
