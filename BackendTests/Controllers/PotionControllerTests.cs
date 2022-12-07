@@ -73,32 +73,21 @@ namespace BackendTests.Controllers
             Assert.That(resultpotion.Name, Is.EqualTo("test"));
         }
 
+
+
         [Test]
         public async Task Delete_Test()
         {
             // Arrange
-            long? id = 1;
+            long id = 1;
 
             // Act
-            await subPotionController.Delete(
-                id);
-
+             await subPotionController.DeleteConfirmed(id);
+            var result = context.HogwartsContext.Potions
+                .Include(p => p.Ingredients)
+                .FirstOrDefaultAsync(m => m.ID == id).Result;
             // Assert
-            Assert.Fail();
-        }
-
-        [Test]
-        public async Task DeleteConfirmed_Test()
-        {
-            // Arrange
-            long id = 0;
-
-            // Act
-            var result = await subPotionController.DeleteConfirmed(
-                id);
-
-            // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo(null));
         }
 
         [TearDown]
