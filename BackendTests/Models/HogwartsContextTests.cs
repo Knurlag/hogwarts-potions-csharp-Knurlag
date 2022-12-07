@@ -112,14 +112,14 @@ namespace BackendTests.Models
         public void GetStudent_Test()
         {
             // Arrange
-            string username = null;
+            string username = "Carson Alexander";
 
             // Act
             var result = hogwartsContext.GetStudent(
                 username);
 
             // Assert
-            Assert.Fail();
+            Assert.That(result.Name, Is.EqualTo("Carson Alexander"));
         }
 
         [Test]
