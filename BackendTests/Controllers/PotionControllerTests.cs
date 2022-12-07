@@ -1,17 +1,22 @@
-﻿namespace BackendTests.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
+
+namespace BackendTests.Controllers
 {
     [TestFixture]
     public class PotionControllerTests
     {
-        private HogwartsContext subHogwartsContext;
+        private Initialize context;
 
         private PotionController subPotionController;
 
         [SetUp]
         public void SetUp()
         {
-            this.subHogwartsContext = Substitute.For<HogwartsContext>(Substitute.For<DbContextOptions<HogwartsContext>>());
-            this.subPotionController = new PotionController(this.subHogwartsContext);
+            this.context = new Initialize();
+            this.subPotionController = new PotionController(this.context.HogwartsContext);
         }
 
 
@@ -20,14 +25,15 @@
         public async Task Details_Test()
         {
             // Arrange
-            long? id = null;
-
+            long? id = 5;
+            var potion =  context.HogwartsContext.Potions
+                .Include(p => p.Ingredients)
+                .FirstOrDefaultAsync(m => m.ID == id).Result;
             // Act
-            var result = await subPotionController.Details(
-                id);
-
+            var details = await subPotionController.Details(id) as ViewResult;
+            var result = details.Model;
             // Assert
-            Assert.Fail();
+            Assert.That(result, Is.EqualTo(potion));
         }
 
         [Test]

@@ -3,14 +3,15 @@
     [TestFixture]
     public class StudentControllerTests
     {
-        private HogwartsContext subHogwartsContext;
+
         private StudentController subStudentController;
+        private Initialize context;
 
         [SetUp]
         public void SetUp()
         {
-            this.subHogwartsContext = Substitute.For<HogwartsContext>(Substitute.For<DbContextOptions<HogwartsContext>>());
-            this.subStudentController = new StudentController(subHogwartsContext);
+            this.context = new Initialize();
+            this.subStudentController = new StudentController(context.HogwartsContext);
         }
 
 

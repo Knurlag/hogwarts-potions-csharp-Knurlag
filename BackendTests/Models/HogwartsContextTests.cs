@@ -3,14 +3,14 @@
     [TestFixture]
     public class HogwartsContextTests
     {
-
         private HogwartsContext hogwartsContext;
+
 
         [SetUp]
         public void SetUp()
         {
 
-            this.hogwartsContext = new HogwartsContext(Substitute.For<DbContextOptions<HogwartsContext>>());
+            this.hogwartsContext = new Initialize().HogwartsContext;
         }
 
 
