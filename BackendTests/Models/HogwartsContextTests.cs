@@ -19,19 +19,33 @@ namespace BackendTests.Models
 
 
         [Test]
-        public async Task BrewPotion_Test()
+        public async Task BrewPotion_Is_Discovery_Test()
         {
             // Arrange
-            Student student = null;
-            var ingredients = new List<Ingredient>();
+            var potions = hogwartsContext.GetAllPotions().Result;
+            IngredientListView ingredientList = new IngredientListView();
+            ingredientList.Ingredients = new List<string> { "Alcohol", "Anjelica", "Belladonna", "Armotentia", "Asphodel" };
 
             // Act
-            var result = await hogwartsContext.BrewPotion(
-                student,
-                ingredients);
+             var result = await hogwartsContext.BrewPotion(hogwartsContext.GetStudent("Carson Alexander"), hogwartsContext.GetIngredientlistByName(ingredientList.Ingredients));
 
             // Assert
-            Assert.Fail();
+            Assert.That(BrewingStatus.Discovery, Is.EqualTo(result.BrewingStatus));
+        }
+
+        [Test]
+        public async Task BrewPotion_Is_Replica_Test()
+        {
+            // Arrange
+            var potions = hogwartsContext.GetAllPotions().Result;
+            IngredientListView ingredientList = new IngredientListView();
+            ingredientList.Ingredients = new List<string> { "Alcohol", "Anjelica", "Belladonna", "Armotentia", "Asphodel" };
+
+            // Act
+            await hogwartsContext.BrewPotion(hogwartsContext.GetStudent("Carson Alexander"), hogwartsContext.GetIngredientlistByName(ingredientList.Ingredients));
+            var result = await hogwartsContext.BrewPotion(hogwartsContext.GetStudent("Carson Alexander"), hogwartsContext.GetIngredientlistByName(ingredientList.Ingredients));
+            // Assert
+            Assert.That(BrewingStatus.Replica, Is.EqualTo(result.BrewingStatus));
         }
 
         [Test]
@@ -95,7 +109,7 @@ namespace BackendTests.Models
         }
 
         [Test]
-        public void Register_Test()
+        public void Register_Test_false()
         {
             // Arrange
             Student user = hogwartsContext.GetStudent("Carson Alexander"); ;
@@ -106,6 +120,21 @@ namespace BackendTests.Models
 
             // Assert
             Assert.That(result, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void Register_Test_true()
+        {
+            // Arrange
+            Student user = new Student();
+            user.Name = "tester";
+
+            // Act
+            var result = hogwartsContext.Register(
+                user);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(true));
         }
 
         [Test]
