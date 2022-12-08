@@ -170,26 +170,34 @@ namespace HogwartsPotions.Models
         {
 
             var potionToUpdate = await Potions.FirstOrDefaultAsync(p => p.ID == id);
-            bool isDiscovery = false;
+            bool isDiscovery = true;
             var recipes = Recipes.ToList();
             if (potionToUpdate.Recipe.Ingredients.Count >= MaxIngredientsForPotions-1)
             {
                 //potionToUpdate.Ingredients.Add(ingredient);
                 potionToUpdate.Recipe.Ingredients.Add(ingredient);
-                foreach (var recipe in recipes)
+                foreach (var recipe in Recipes.Include(recipe => recipe.Ingredients))
                 {
-                    if (recipe != recipes[recipes.Count - 1])
+                    var index = -1;
+                    var ingredientCounter = 0;
+                    foreach (var currentIngredient in potionToUpdate.Recipe.Ingredients)
                     {
-                        if (!potionToUpdate.Recipe.Ingredients.Equals(recipe.Ingredients))
+                        index++;
+                        if (currentIngredient.Name == recipe.Ingredients[index].Name)
                         {
-                            isDiscovery = true;
+                            ingredientCounter++;
                         }
-                        else
+                    }
+
+                    if (recipe != recipes[^1])
+                    {
+                        if (ingredientCounter == 5)
                         {
-                            isDiscovery = false;
+                            isDiscovery =false;
                         }
                     }
                 }
+
                 if (isDiscovery)
                 {
                     potionToUpdate.BrewingStatus = BrewingStatus.Discovery;
