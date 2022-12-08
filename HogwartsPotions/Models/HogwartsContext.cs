@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -57,10 +58,6 @@ namespace HogwartsPotions.Models
             return Rooms.Include(room => room.Residents).ToListAsync();
         }
 
-        public async Task UpdateRoom(Room room)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task DeleteRoom(long id)
         {
@@ -77,22 +74,20 @@ namespace HogwartsPotions.Models
 
         public Task<List<Room>> GetRoomsForRatOwners()
         {
-            var goodRooms = new List<Room>();
-            foreach (var room in Rooms.Include(r => r.Residents).ToList())
+            
+            var goodRooms = Rooms.Include(r => r.Residents).ToList();
+            var allRooms = Rooms.Include(r => r.Residents).ToList();
+            foreach (var room in allRooms)
             {
-                if (room.Residents.Count == 0)
+                var petTypes = new List<PetType>();
+                foreach (var student in room.Residents)
                 {
-                    goodRooms.Add(room);
+                    petTypes.Add(student.PetType);
                 }
-                else
+
+                if (petTypes.Contains(PetType.Cat) || petTypes.Contains(PetType.Owl))
                 {
-                    foreach (var student in room.Residents)
-                    {
-                        if (student.PetType is PetType.None or PetType.Rat)
-                        {
-                            goodRooms.Add(room);
-                        }
-                    }
+                    goodRooms.Remove(room);
                 }
             }
             return Task.FromResult(goodRooms);
@@ -165,7 +160,7 @@ namespace HogwartsPotions.Models
         public Task<Potion> BrewPotionSlowly(long id)
         {
             var student = Students.First(p => p.ID == id);
-            var potion = new Potion { BrewerStudent = student, BrewingStatus = BrewingStatus.Brew };
+            var potion = new Potion { BrewerStudent = student, BrewingStatus = BrewingStatus.Brew, Recipe = new Recipe()};
             Potions.Add(potion);
             SaveChanges();
             return Task.FromResult(potion);
@@ -175,31 +170,56 @@ namespace HogwartsPotions.Models
         {
 
             var potionToUpdate = await Potions.FirstOrDefaultAsync(p => p.ID == id);
-            if (potionToUpdate.Recipe.Ingredients.Count == MaxIngredientsForPotions)
+            bool isDiscovery = true;
+            var recipes = Recipes.ToList();
+            if (potionToUpdate.Recipe.Ingredients.Count >= MaxIngredientsForPotions-1)
             {
-                foreach (var recipe in Recipes)
+                //potionToUpdate.Ingredients.Add(ingredient);
+                potionToUpdate.Recipe.Ingredients.Add(ingredient);
+                foreach (var recipe in Recipes.Include(recipe => recipe.Ingredients))
                 {
-                    if (potionToUpdate.Recipe.Ingredients.Equals(recipe.Ingredients))
+                    var index = -1;
+                    var ingredientCounter = 0;
+                    foreach (var currentIngredient in potionToUpdate.Recipe.Ingredients)
                     {
-                        potionToUpdate.BrewingStatus = BrewingStatus.Replica;
-                        Update(potionToUpdate);
-                        await SaveChangesAsync();
+                        index++;
+                        if (currentIngredient.Name == recipe.Ingredients[index].Name)
+                        {
+                            ingredientCounter++;
+                        }
                     }
-                    else
+
+                    if (recipe != recipes[^1])
                     {
-                        potionToUpdate.BrewingStatus = BrewingStatus.Discovery;
-                        Update(potionToUpdate);
-                        await SaveChangesAsync();
+                        if (ingredientCounter == 5)
+                        {
+                            isDiscovery =false;
+                        }
                     }
                 }
 
+                if (isDiscovery)
+                {
+                    potionToUpdate.BrewingStatus = BrewingStatus.Discovery;
+                    Update(potionToUpdate);
+                    await SaveChangesAsync();
+                }
+                else
+                {
+                    potionToUpdate.BrewingStatus = BrewingStatus.Replica;
+                    Update(potionToUpdate);
+                    await SaveChangesAsync();
+                }
             }
             else
             {
+                //potionToUpdate.Ingredients.Add(ingredient);
                 potionToUpdate.Recipe.Ingredients.Add(ingredient);
                 Update(potionToUpdate);
                 await SaveChangesAsync();
             }
+
+
             return potionToUpdate;
         }
 
@@ -207,7 +227,7 @@ namespace HogwartsPotions.Models
         {
             var potion = await Potions.FirstOrDefaultAsync(p => p.ID == id);
             var recipesWithSameIngredients = new List<Recipe>();
-            if (potion.Recipe.Ingredients.Count < MaxIngredientsForPotions)
+            if (potion.Recipe.Ingredients.Count <= MaxIngredientsForPotions)
             {
 
                 foreach (var recipe in Recipes.Include(r => r.Ingredients))
@@ -220,7 +240,11 @@ namespace HogwartsPotions.Models
                             numOfSameIngredients++;
                             if (numOfSameIngredients <= potion.Recipe.Ingredients.Count)
                             {
-                                recipesWithSameIngredients.Add(recipe);
+                                if (!recipesWithSameIngredients.Contains(recipe))
+                                {
+                                    recipesWithSameIngredients.Add(recipe);
+                                }
+
                             }
                         }
                     }
@@ -229,7 +253,7 @@ namespace HogwartsPotions.Models
                 return recipesWithSameIngredients;
             }
 
-            return recipesWithSameIngredients;
+            return null;
         }
 
         public bool ValidateLogin(Student user)
@@ -257,17 +281,37 @@ namespace HogwartsPotions.Models
 
         public Student GetStudent(string username)
         {
-            return Students.First(p => p.Name == username); ;
+            var student = Students.FirstOrDefault(p => p.Name == username);
+            if (student == null)
+            {
+                //TODO add Error logging
+            }
+            return student;
         }
 
         public List<Ingredient> GetIngredientlistByName(List<string> potionIngredients)
         {
             List<Ingredient> result = new List<Ingredient>();
-            foreach (var ingredient in potionIngredients)
+            foreach (var ingredientstr in potionIngredients)
             {
-                result.Add(Ingredients.First(i => i.Name == ingredient));
+                var ingredient = Ingredients.FirstOrDefault(i => i.Name == ingredientstr);
+                if (ingredient == null)
+                {
+                    //TODO add Error logging
+                }
+                result.Add(ingredient);
             }
 
+            return result;
+        }
+
+        public Ingredient GetIngredientByName(string ingredient)
+        {
+            Ingredient result = Ingredients.FirstOrDefault(i => i.Name == ingredient);
+            if (result == null)
+            {
+                //TODO add Error logging
+            }
             return result;
         }
     }

@@ -1,0 +1,12 @@
+global using NUnit.Framework;
+global using HogwartsPotions.Controllers;
+global using HogwartsPotions.Models;
+global using NSubstitute;
+global using NUnit.Framework;
+global using System.Threading.Tasks;
+global using HogwartsPotions.data;
+global using HogwartsPotions.Models.Entities;
+global using Microsoft.AspNetCore.Http;
+global using HogwartsPotions.Helpers;
+global using Microsoft.EntityFrameworkCore;
+global using HogwartsPotions.Models.Enums;
