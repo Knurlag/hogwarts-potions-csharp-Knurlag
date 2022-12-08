@@ -37,20 +37,7 @@ namespace BackendTests.Controllers
         }
 
 
-        [Test]
-        public async Task Create_Test_()
-        {
-            // Arrange
-            var potions = context.HogwartsContext.GetAllPotions().Result;
-            IngredientListView ingredientList = new IngredientListView();
-            ingredientList.Ingredients = new List<string>{ "Alcohol", "Anjelica", "Belladonna", "Armotentia", "Asphodel" };
 
-            // Act
-            await subPotionController.Create(ingredientList);
-
-            // Assert
-            Assert.That(context.HogwartsContext.GetAllPotions().Result, Is.Not.EqualTo(potions));
-        }
 
 
         [Test]
