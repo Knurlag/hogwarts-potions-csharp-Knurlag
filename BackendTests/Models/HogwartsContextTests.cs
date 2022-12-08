@@ -79,7 +79,40 @@ namespace BackendTests.Models
             Assert.Pass();
         }
 
+        [Test]
+        public async Task AddIngredientToPotion_Replica_Test()
+        {
+            // Arrange
+            long id = 1;
+            
+            var expected = hogwartsContext.Potions
+                .Include(p => p.Ingredients)
+                .FirstOrDefaultAsync(m => m.ID == id).Result;
+            // Act
+            var result = await hogwartsContext.AddIngredientToPotion(id, hogwartsContext.GetIngredientByName("Abraxan hair"));
 
+            // Assert
+            Assert.That(result, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public async Task AddIngredientToPotion_Discovery_Test()
+        {
+            // Arrange
+            long id = 1;
+            IngredientListView ingredientList = new IngredientListView();
+            ingredientList.Ingredients = new List<string> { "Alcohol", "Anjelica", "Belladonna", "Armotentia" };
+            var potion = await hogwartsContext.BrewPotion(hogwartsContext.GetStudent("Carson Alexander"),
+                hogwartsContext.GetIngredientlistByName(ingredientList.Ingredients));
+            var expected = hogwartsContext.Potions
+                .Include(p => p.Ingredients)
+                .FirstOrDefaultAsync(m => m.ID == 3).Result;
+            // Act
+            var result = await hogwartsContext.AddIngredientToPotion(3, hogwartsContext.GetIngredientByName("Asphodel"));
+
+            // Assert
+            Assert.That(result, Is.EqualTo(expected));
+        }
         [Test]
         public async Task GetHelp_Test()
         {
