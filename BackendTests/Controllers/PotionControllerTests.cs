@@ -37,8 +37,26 @@ namespace BackendTests.Controllers
         }
 
 
-
-
+        [Test]
+        public async Task Details_nullId_Test()
+        {
+            // Arrange
+            long? id = null;
+            // Act
+            var result = await subPotionController.Details(id) as NotFoundResult;
+            // Assert
+            Assert.That(result.StatusCode, Is.EqualTo(new NotFoundResult().StatusCode));
+        }
+        [Test]
+        public async Task Details_WrongId_Test()
+        {
+            // Arrange
+            long? id = 100;
+            // Act
+            var result = await subPotionController.Details(id) as NotFoundResult;
+            // Assert
+            Assert.That(result.StatusCode, Is.EqualTo(new NotFoundResult().StatusCode));
+        }
 
         [Test]
         public async Task Edit_Test()
@@ -60,6 +78,23 @@ namespace BackendTests.Controllers
             Assert.That(resultpotion.Name, Is.EqualTo("test"));
         }
 
+        [Test]
+        public async Task Edit_WrongId_Test()
+        {
+            // Arrange
+            long id = 1;
+
+            var potion = context.HogwartsContext.Potions
+                .Include(p => p.Ingredients)
+                .FirstOrDefaultAsync(m => m.ID == id).Result;
+
+            // Act
+            potion.Name = "test";
+            var result = await subPotionController.Edit(3, potion) as NotFoundResult;
+
+            // Assert
+            Assert.That(result.StatusCode, Is.EqualTo(new NotFoundResult().StatusCode));
+        }
 
 
         [Test]
@@ -75,6 +110,21 @@ namespace BackendTests.Controllers
                 .FirstOrDefaultAsync(m => m.ID == id).Result;
             // Assert
             Assert.That(result, Is.EqualTo(null));
+        }
+
+        [Test]
+        public async Task DeleteConfirmed_NullDb_Test()
+        {
+            // Arrange
+            context.HogwartsContext.Potions = null;
+            long id = 1;
+            var expected = new ProblemDetails();
+            expected.Detail = "Entity set 'HogwartsContext.Potions'  is null.";
+            // Act
+            var result = await subPotionController.DeleteConfirmed(id) as ObjectResult;
+            ProblemDetails detail = (ProblemDetails)result.Value;
+            // Assert
+            Assert.That(detail.Detail, Is.EqualTo(expected.Detail));
         }
 
         [TearDown]
