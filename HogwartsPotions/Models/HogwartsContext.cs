@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -159,7 +160,7 @@ namespace HogwartsPotions.Models
         public Task<Potion> BrewPotionSlowly(long id)
         {
             var student = Students.First(p => p.ID == id);
-            var potion = new Potion { BrewerStudent = student, BrewingStatus = BrewingStatus.Brew };
+            var potion = new Potion { BrewerStudent = student, BrewingStatus = BrewingStatus.Brew, Recipe = new Recipe()};
             Potions.Add(potion);
             SaveChanges();
             return Task.FromResult(potion);
@@ -201,7 +202,7 @@ namespace HogwartsPotions.Models
         {
             var potion = await Potions.FirstOrDefaultAsync(p => p.ID == id);
             var recipesWithSameIngredients = new List<Recipe>();
-            if (potion.Recipe.Ingredients.Count < MaxIngredientsForPotions)
+            if (potion.Recipe.Ingredients.Count <= MaxIngredientsForPotions)
             {
 
                 foreach (var recipe in Recipes.Include(r => r.Ingredients))
@@ -214,7 +215,11 @@ namespace HogwartsPotions.Models
                             numOfSameIngredients++;
                             if (numOfSameIngredients <= potion.Recipe.Ingredients.Count)
                             {
-                                recipesWithSameIngredients.Add(recipe);
+                                if (!recipesWithSameIngredients.Contains(recipe))
+                                {
+                                    recipesWithSameIngredients.Add(recipe);
+                                }
+
                             }
                         }
                     }
@@ -223,7 +228,7 @@ namespace HogwartsPotions.Models
                 return recipesWithSameIngredients;
             }
 
-            return recipesWithSameIngredients;
+            return null;
         }
 
         public bool ValidateLogin(Student user)
@@ -251,17 +256,37 @@ namespace HogwartsPotions.Models
 
         public Student GetStudent(string username)
         {
-            return Students.First(p => p.Name == username); ;
+            var student = Students.FirstOrDefault(p => p.Name == username);
+            if (student == null)
+            {
+                //TODO add Error logging
+            }
+            return student;
         }
 
         public List<Ingredient> GetIngredientlistByName(List<string> potionIngredients)
         {
             List<Ingredient> result = new List<Ingredient>();
-            foreach (var ingredient in potionIngredients)
+            foreach (var ingredientstr in potionIngredients)
             {
-                result.Add(Ingredients.First(i => i.Name == ingredient));
+                var ingredient = Ingredients.FirstOrDefault(i => i.Name == ingredientstr);
+                if (ingredient == null)
+                {
+                    //TODO add Error logging
+                }
+                result.Add(ingredient);
             }
 
+            return result;
+        }
+
+        public Ingredient GetIngredientByName(string ingredient)
+        {
+            Ingredient result = Ingredients.FirstOrDefault(i => i.Name == ingredient);
+            if (result == null)
+            {
+                //TODO add Error logging
+            }
             return result;
         }
     }
