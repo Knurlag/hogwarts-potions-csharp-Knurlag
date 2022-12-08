@@ -83,16 +83,16 @@ namespace BackendTests.Models
         public async Task AddIngredientToPotion_Replica_Test()
         {
             // Arrange
-            long id = 1;
-            
-            var expected = hogwartsContext.Potions
-                .Include(p => p.Ingredients)
-                .FirstOrDefaultAsync(m => m.ID == id).Result;
+            long id = 3;
+            IngredientListView ingredientList = new IngredientListView();
+            ingredientList.Ingredients = new List<string> { "Abraxan hair", "Acromantula venom", "Adder's Fork", "African Red Pepper" };
+            var potion = await hogwartsContext.BrewPotion(hogwartsContext.GetStudent("Carson Alexander"),
+                hogwartsContext.GetIngredientlistByName(ingredientList.Ingredients));
             // Act
-            var result = await hogwartsContext.AddIngredientToPotion(id, hogwartsContext.GetIngredientByName("Abraxan hair"));
+            var result = await hogwartsContext.AddIngredientToPotion(id, hogwartsContext.GetIngredientByName("African Sea Salt"));
 
             // Assert
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result.BrewingStatus, Is.EqualTo(BrewingStatus.Replica));
         }
 
         [Test]
@@ -104,14 +104,11 @@ namespace BackendTests.Models
             ingredientList.Ingredients = new List<string> { "Alcohol", "Anjelica", "Belladonna", "Armotentia" };
             var potion = await hogwartsContext.BrewPotion(hogwartsContext.GetStudent("Carson Alexander"),
                 hogwartsContext.GetIngredientlistByName(ingredientList.Ingredients));
-            var expected = hogwartsContext.Potions
-                .Include(p => p.Ingredients)
-                .FirstOrDefaultAsync(m => m.ID == 3).Result;
             // Act
             var result = await hogwartsContext.AddIngredientToPotion(3, hogwartsContext.GetIngredientByName("Asphodel"));
 
             // Assert
-            Assert.That(result, Is.EqualTo(expected));
+            Assert.That(result.BrewingStatus, Is.EqualTo(BrewingStatus.Discovery));
         }
         [Test]
         public async Task GetHelp_Test()
