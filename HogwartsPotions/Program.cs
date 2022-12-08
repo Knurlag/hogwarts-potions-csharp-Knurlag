@@ -22,12 +22,9 @@ namespace HogwartsPotions
                 var exception = (Exception)e.ExceptionObject;
                 ILog logger = LogManager.GetLogger("logger");
                 logger.Error("An error occurred", exception);
-
             };
             var host = CreateHostBuilder(args).Build();
             CreateDbIfNotExists(host);
-
-            
             host.Run();
         }
 
