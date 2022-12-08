@@ -85,14 +85,37 @@ namespace BackendTests.Models
         {
             // Arrange
             long id = 1;
-
+            var potion = await hogwartsContext.BrewPotionSlowly(id);
+            await hogwartsContext.AddIngredientToPotion(3, hogwartsContext.GetIngredientByName("Alcohol"));
+            var expected = hogwartsContext.Recipes
+                .Include(p => p.Ingredients)
+                .FirstOrDefaultAsync(m => m.ID == 2).Result;
             // Act
             var result = await hogwartsContext.GetHelp(
-                id);
+                3);
 
             // Assert
-            Assert.Pass();
+            Assert.That(result[0], Is.EqualTo(expected));
         }
+
+
+        [Test]
+        public async Task GetHelp_5Ingredient_Test()
+        {
+            // Arrange
+            long id = 1;
+            var expected = hogwartsContext.Recipes
+                .Include(p => p.Ingredients)
+                .FirstOrDefaultAsync(m => m.ID == 1).Result;
+            // Act
+            var result = await hogwartsContext.GetHelp(
+                1);
+
+            // Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result[0], Is.EqualTo(expected));
+        }
+
 
         [Test]
         public void ValidateLogin_Test()
