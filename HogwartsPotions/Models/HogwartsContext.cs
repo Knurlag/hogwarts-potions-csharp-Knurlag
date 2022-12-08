@@ -170,31 +170,40 @@ namespace HogwartsPotions.Models
         {
 
             var potionToUpdate = await Potions.FirstOrDefaultAsync(p => p.ID == id);
-            if (potionToUpdate.Recipe.Ingredients.Count == MaxIngredientsForPotions)
+            bool isDiscovery = false;
+            if (potionToUpdate.Recipe.Ingredients.Count >= MaxIngredientsForPotions-1)
             {
+                potionToUpdate.Ingredients.Add(ingredient);
+                potionToUpdate.Recipe.Ingredients.Add(ingredient);
                 foreach (var recipe in Recipes)
                 {
-                    if (potionToUpdate.Recipe.Ingredients.Equals(recipe.Ingredients))
+                    if (!potionToUpdate.Recipe.Ingredients.Equals(recipe.Ingredients))
                     {
-                        potionToUpdate.BrewingStatus = BrewingStatus.Replica;
-                        Update(potionToUpdate);
-                        await SaveChangesAsync();
-                    }
-                    else
-                    {
-                        potionToUpdate.BrewingStatus = BrewingStatus.Discovery;
-                        Update(potionToUpdate);
-                        await SaveChangesAsync();
+                        isDiscovery = true;
                     }
                 }
-
+                if (isDiscovery)
+                {
+                    potionToUpdate.BrewingStatus = BrewingStatus.Discovery;
+                    Update(potionToUpdate);
+                    await SaveChangesAsync();
+                }
+                else
+                {
+                    potionToUpdate.BrewingStatus = BrewingStatus.Replica;
+                    Update(potionToUpdate);
+                    await SaveChangesAsync();
+                }
             }
             else
             {
+                potionToUpdate.Ingredients.Add(ingredient);
                 potionToUpdate.Recipe.Ingredients.Add(ingredient);
                 Update(potionToUpdate);
                 await SaveChangesAsync();
             }
+
+
             return potionToUpdate;
         }
 
