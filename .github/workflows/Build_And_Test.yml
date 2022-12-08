@@ -9,7 +9,7 @@ on:
 jobs:
     build_test:
         name: Build & Test App
-        runs-on: windows - latest
+        runs-on: windows-latest
         #if: "contains(github.event.commits[0].message, '[build app]')"
         steps:
         - uses: actions/checkout@v3
