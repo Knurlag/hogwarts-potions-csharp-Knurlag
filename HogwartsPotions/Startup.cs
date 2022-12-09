@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using HogwartsPotions.Helpers;
 using HogwartsPotions.Models;
@@ -41,6 +42,7 @@ namespace HogwartsPotions
         {
             if (env.IsDevelopment())
             {
+                
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -54,7 +56,16 @@ namespace HogwartsPotions
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
-
+            log4net.Config.XmlConfigurator.Configure();
+            AppDomain.CurrentDomain.FirstChanceException += (s, e) =>
+            {
+                if (e.Exception.TargetSite.DeclaringType.Assembly == Assembly.GetExecutingAssembly())
+                {
+                    var exception = e.Exception;
+                    ILog logger = LogManager.GetLogger("logger");
+                    logger.ErrorFormat("Exception Thrown: {0}\n{1}", exception.Message, exception.StackTrace);
+                }
+            };
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

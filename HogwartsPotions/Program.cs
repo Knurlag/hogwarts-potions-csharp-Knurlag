@@ -15,16 +15,13 @@ namespace HogwartsPotions
 {
     public class Program
     {
+        private static ILog logger = LogManager.GetLogger("logger");
         public static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
-            {
-                var exception = (Exception)e.ExceptionObject;
-                ILog logger = LogManager.GetLogger("logger");
-                logger.Error("An error occurred", exception);
-            };
+
             var host = CreateHostBuilder(args).Build();
             CreateDbIfNotExists(host);
+            logger.Error("testtst");
             host.Run();
         }
 
@@ -41,7 +38,6 @@ namespace HogwartsPotions
                 }
                 catch (Exception ex)
                 {
-                    ILog logger = LogManager.GetLogger("logger");
                     logger.Error( "An error occurred creating the DB.", ex);
                 }
             }
