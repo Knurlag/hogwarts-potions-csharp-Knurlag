@@ -8,7 +8,7 @@ using HogwartsPotions.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace HogwartsPotions.Models
+namespace HogwartsPotions.Data
 {
     public class HogwartsContext : DbContext
     {
@@ -74,7 +74,7 @@ namespace HogwartsPotions.Models
 
         public Task<List<Room>> GetRoomsForRatOwners()
         {
-            
+
             var goodRooms = Rooms.Include(r => r.Residents).ToList();
             var allRooms = Rooms.Include(r => r.Residents).ToList();
             foreach (var room in allRooms)
@@ -122,12 +122,12 @@ namespace HogwartsPotions.Models
 
 
             var name = $"{student.Name}'s Discovery #{GetAllPotionsOfStudent(student.ID, BrewingStatus.Discovery).Result.Count + 1}";
-            var potionRecipe = new Recipe { Ingredients = ingredients, Name = name, Student = student};
+            var potionRecipe = new Recipe { Ingredients = ingredients, Name = name, Student = student };
             var potion = new Potion { BrewerStudent = student, Ingredients = ingredients, BrewingStatus = status, Recipe = potionRecipe, Name = name };
             if (status == BrewingStatus.Discovery)
             {
-                
-                Potions.Add(potion); 
+
+                Potions.Add(potion);
                 Recipes.Add(potionRecipe);
                 SaveChanges();
                 return Task.FromResult(potion);
@@ -160,7 +160,7 @@ namespace HogwartsPotions.Models
         public Task<Potion> BrewPotionSlowly(long id)
         {
             var student = Students.First(p => p.ID == id);
-            var potion = new Potion { BrewerStudent = student, BrewingStatus = BrewingStatus.Brew, Recipe = new Recipe()};
+            var potion = new Potion { BrewerStudent = student, BrewingStatus = BrewingStatus.Brew, Recipe = new Recipe() };
             Potions.Add(potion);
             SaveChanges();
             return Task.FromResult(potion);
@@ -172,7 +172,7 @@ namespace HogwartsPotions.Models
             var potionToUpdate = await Potions.FirstOrDefaultAsync(p => p.ID == id);
             bool isDiscovery = true;
             var recipes = Recipes.ToList();
-            if (potionToUpdate.Recipe.Ingredients.Count >= MaxIngredientsForPotions-1)
+            if (potionToUpdate.Recipe.Ingredients.Count >= MaxIngredientsForPotions - 1)
             {
                 //potionToUpdate.Ingredients.Add(ingredient);
                 potionToUpdate.Recipe.Ingredients.Add(ingredient);
@@ -193,7 +193,7 @@ namespace HogwartsPotions.Models
                     {
                         if (ingredientCounter == 5)
                         {
-                            isDiscovery =false;
+                            isDiscovery = false;
                         }
                     }
                 }

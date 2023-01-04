@@ -1,4 +1,6 @@
-﻿namespace BackendTests;
+﻿using HogwartsPotions.Data;
+
+namespace BackendTests;
 
 public class Initialize
 {

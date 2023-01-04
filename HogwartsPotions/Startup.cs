@@ -1,8 +1,8 @@
 using System;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using HogwartsPotions.Data;
 using HogwartsPotions.Helpers;
-using HogwartsPotions.Models;
 using log4net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

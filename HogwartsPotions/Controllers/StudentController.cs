@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using HogwartsPotions.Data;
 using HogwartsPotions.Helpers;
-using HogwartsPotions.Models;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
 using Microsoft.AspNetCore.Http;

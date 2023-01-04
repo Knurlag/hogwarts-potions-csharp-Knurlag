@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using HogwartsPotions.data;
-using HogwartsPotions.Models;
+using HogwartsPotions.Data;
 using log4net;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

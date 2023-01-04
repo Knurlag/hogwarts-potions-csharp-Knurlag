@@ -1,4 +1,5 @@
-﻿using HogwartsPotions.Models.Entities;
+﻿using HogwartsPotions.Data;
+using HogwartsPotions.Models.Entities;
 using NuGet.Protocol;
 
 namespace BackendTests.Models

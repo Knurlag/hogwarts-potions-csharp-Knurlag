@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using HogwartsPotions.Models;
+using HogwartsPotions.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
