@@ -274,15 +274,15 @@ namespace HogwartsPotions.Data
             }
             return CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(str1), Encoding.UTF8.GetBytes(str2));
         }
-        private bool CheckRegistrationStatus(Student user)
+        private bool CheckRegistrationStatus(string name)
         {
-            var u = Students.FirstOrDefault(u => u.Name == user.Name);
+            var u = Students.FirstOrDefault(u => u.Name == name);
             return u == null;
         }
 
         public bool Register(Student user)
         {
-            if (CheckRegistrationStatus(user))
+            if (CheckRegistrationStatus(user.Name))
             {
                 user.Password = PasswordHash.HashPassword(user.Password);
                 Students.Add(user);
