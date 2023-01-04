@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using HogwartsPotions.Data;
 using HogwartsPotions.Helpers;
+using HogwartsPotions.Models;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
 using Microsoft.AspNetCore.Http;
@@ -24,12 +27,10 @@ namespace HogwartsPotions.Controllers
             return View();
         }
 
-        public IActionResult ValidateLogin()
+        public IActionResult ValidateLogin(string username, string password)
         {
-            string username = Request.Form["login-username"];
-            string password = Request.Form["login-password"];
-            Student user = new Student() { Name = username, Password = password };
-            if (_context.ValidateLogin(user))
+            LoginForm loginForm = new LoginForm(username, password);
+            if (_context.ValidateLogin(loginForm))
             {
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
                 return RedirectToAction("Index", "Home");
