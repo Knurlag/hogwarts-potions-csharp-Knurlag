@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using HogwartsPotions.Models;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -256,11 +259,21 @@ namespace HogwartsPotions.Data
             return null;
         }
 
-        public bool ValidateLogin(Student user)
+        public bool ValidateLogin(LoginForm loginForm)
         {
-            return Students.Any(u => u.Name == user.Name && u.Password == user.Password);
+            string hashedPassword = PasswordHash.HashPassword(loginForm.Password);
+            
+            return Students.AsEnumerable().Any(u => u.Name == loginForm.Username && FixedTimeEquals(u.Password, hashedPassword));
         }
 
+        private bool FixedTimeEquals(string str1, string str2)
+        {
+            if (str1 == null || str2 == null)
+            {
+                return false;
+            }
+            return CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(str1), Encoding.UTF8.GetBytes(str2));
+        }
         private bool CheckRegistrationStatus(Student user)
         {
             var u = Students.FirstOrDefault(u => u.Name == user.Name);
@@ -271,6 +284,7 @@ namespace HogwartsPotions.Data
         {
             if (CheckRegistrationStatus(user))
             {
+                user.Password = PasswordHash.HashPassword(user.Password);
                 Students.Add(user);
                 SaveChanges();
                 return true;
