@@ -30,24 +30,24 @@ namespace HogwartsPotions.Controllers
         public IActionResult ValidateLogin(string username, string password)
         {
             LoginForm loginForm = new LoginForm(username, password);
-            if (_context.ValidateLogin(loginForm))
+            if (username != null && password != null)
             {
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
-                return RedirectToAction("Index", "Home");
+                if (_context.ValidateLogin(loginForm))
+                {
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
+                    return RedirectToAction("Index", "Home");
+                }
             }
+
 
             var message = "Please enter the correct credentials!";
             HttpContext.Session.SetString("message", message);
             return RedirectToAction("Index");
         }
 
-        public IActionResult Register()
+        public IActionResult Register(string username, string password, HouseType houseType, PetType petType)
         {
-            string username = Request.Form["register-username"];
-            string password = Request.Form["register-password"];
-            string houseType = Request.Form["register-houseType"];
-            string petType = Request.Form["register-petType"];
-            Student user = new Student() { Name = username, Password = password, HouseType = (HouseType)Enum.Parse(typeof(HouseType) , houseType), PetType = (PetType) Enum.Parse(typeof(PetType), petType)};
+            Student user = new Student() { Name = username, Password = password, HouseType = houseType, PetType = petType};
             if (_context.Register(user))
             {
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
