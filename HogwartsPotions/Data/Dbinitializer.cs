@@ -15,7 +15,7 @@ namespace HogwartsPotions.data
             context.Database.EnsureCreated();
 
             // Look for any students.
-            if (context.Students.Local.Count()>0)
+            if (context.Students.Any())
             {
                 return;   // DB has been seeded
             }

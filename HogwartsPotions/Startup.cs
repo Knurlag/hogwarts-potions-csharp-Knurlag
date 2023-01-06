@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using HogwartsPotions.Data;
 using HogwartsPotions.Helpers;
+using HogwartsPotions.Services.Interfaces;
+using HogwartsPotions.Services;
 using log4net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +35,10 @@ namespace HogwartsPotions
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSession();
             services.AddControllersWithViews();
+            services.AddTransient<IPotionService, PotionService>();
+            services.AddTransient<IStudentService, StudentService>();
+            services.AddTransient<IRoomService, RoomService>();
+            services.AddTransient<IIngredientService, IngredientService>();
             services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
         }

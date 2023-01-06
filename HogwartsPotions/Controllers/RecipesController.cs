@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using HogwartsPotions.Data;
+using HogwartsPotions.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,16 +8,16 @@ namespace HogwartsPotions.Controllers
 {
     public class RecipesController : Controller
     {
-        private readonly HogwartsContext _context;
+        private readonly IPotionService _service;
 
-        public RecipesController(HogwartsContext context)
+        public RecipesController(IPotionService service)
         {
-            _context = context;
+            _service = service;
         }
         [Route("Recipes")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Recipes.Include(p => p.Ingredients).Include(m => m.Student).ToListAsync());
+            return View(await _service.GetAllRecipes());
         }
     }
 }

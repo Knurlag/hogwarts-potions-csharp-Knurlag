@@ -7,6 +7,7 @@ using HogwartsPotions.Helpers;
 using HogwartsPotions.Models;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
+using HogwartsPotions.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +15,11 @@ namespace HogwartsPotions.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly HogwartsContext _context;
+        private readonly IStudentService _studentService;
 
-        public StudentController(HogwartsContext context)
+        public StudentController(IStudentService studentService)
         {
-            _context = context;
+            _studentService = studentService;
         }
         public IActionResult Index()
         {
@@ -32,7 +33,7 @@ namespace HogwartsPotions.Controllers
             LoginForm loginForm = new LoginForm(username, password);
             if (username != null && password != null)
             {
-                if (_context.ValidateLogin(loginForm))
+                if (_studentService.ValidateLogin(loginForm))
                 {
                     SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
                     return RedirectToAction("Index", "Home");
@@ -48,7 +49,7 @@ namespace HogwartsPotions.Controllers
         public IActionResult Register(string username, string password, HouseType houseType, PetType petType)
         {
             Student user = new Student() { Name = username, Password = password, HouseType = houseType, PetType = petType};
-            if (_context.Register(user))
+            if (_studentService.Register(user))
             {
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
                 return RedirectToAction("Index", "Student");
