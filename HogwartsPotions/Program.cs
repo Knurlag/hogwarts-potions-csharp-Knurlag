@@ -21,7 +21,6 @@ namespace HogwartsPotions
 
             var host = CreateHostBuilder(args).Build();
             CreateDbIfNotExists(host);
-            logger.Error("testtst");
             host.Run();
         }
 

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using HogwartsPotions.Data;
 using HogwartsPotions.Helpers;
+using HogwartsPotions.Models;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
+using HogwartsPotions.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +15,11 @@ namespace HogwartsPotions.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly HogwartsContext _context;
+        private readonly IStudentService _studentService;
 
-        public StudentController(HogwartsContext context)
+        public StudentController(IStudentService studentService)
         {
-            _context = context;
+            _studentService = studentService;
         }
         public IActionResult Index()
         {
@@ -24,30 +28,28 @@ namespace HogwartsPotions.Controllers
             return View();
         }
 
-        public IActionResult ValidateLogin()
+        public IActionResult ValidateLogin(string username, string password)
         {
-            string username = Request.Form["login-username"];
-            string password = Request.Form["login-password"];
-            Student user = new Student() { Name = username, Password = password };
-            if (_context.ValidateLogin(user))
+            LoginForm loginForm = new LoginForm(username, password);
+            if (username != null && password != null)
             {
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
-                return RedirectToAction("Index", "Home");
+                if (_studentService.ValidateLogin(loginForm))
+                {
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
+                    return RedirectToAction("Index", "Home");
+                }
             }
+
 
             var message = "Please enter the correct credentials!";
             HttpContext.Session.SetString("message", message);
             return RedirectToAction("Index");
         }
 
-        public IActionResult Register()
+        public IActionResult Register(string username, string password, HouseType houseType, PetType petType)
         {
-            string username = Request.Form["register-username"];
-            string password = Request.Form["register-password"];
-            string houseType = Request.Form["register-houseType"];
-            string petType = Request.Form["register-petType"];
-            Student user = new Student() { Name = username, Password = password, HouseType = (HouseType)Enum.Parse(typeof(HouseType) , houseType), PetType = (PetType) Enum.Parse(typeof(PetType), petType)};
-            if (_context.Register(user))
+            Student user = new Student() { Name = username, Password = password, HouseType = houseType, PetType = petType};
+            if (_studentService.Register(user))
             {
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
                 return RedirectToAction("Index", "Student");
