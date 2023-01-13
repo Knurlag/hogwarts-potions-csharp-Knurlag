@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using HogwartsPotions.Data;
 using HogwartsPotions.Helpers;
 using HogwartsPotions.Models;
@@ -9,6 +10,7 @@ using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
 using HogwartsPotions.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HogwartsPotions.Controllers
@@ -16,10 +18,12 @@ namespace HogwartsPotions.Controllers
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
+        private readonly UserManager<Student> _userManager;
 
-        public StudentController(IStudentService studentService)
+        public StudentController(IStudentService studentService, UserManager<Student> userManager)
         {
             _studentService = studentService;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
@@ -46,15 +50,22 @@ namespace HogwartsPotions.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Register(string username, string password, HouseType houseType, PetType petType)
+        public async Task<IActionResult> Register(RegisterForm registerForm)
         {
-            Student user = new Student() { Name = username, Password = password, HouseType = houseType, PetType = petType};
-            if (_studentService.Register(user))
+
+            Student user = new Student() { UserName = registerForm.Username, HouseType = registerForm.HouseType, PetType = registerForm.PetType};
+            var result = await _userManager.CreateAsync(user, registerForm.Password);
+            if (result.Succeeded)
             {
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "username", registerForm.Username);
                 return RedirectToAction("Index", "Student");
             }
-            var message = "User already exists!";
+            var message = "";
+            foreach (var error in result.Errors)
+            {
+                message += error.Description;
+            }
+
             HttpContext.Session.SetString("message", message);
             return RedirectToAction("Index");
         }
