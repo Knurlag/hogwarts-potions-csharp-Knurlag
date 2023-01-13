@@ -45,7 +45,7 @@ public class PotionService : IPotionService
             }
         }
 
-        var name = $"{student.Name}'s Discovery #{GetAllPotionsOfStudent(student.ID, BrewingStatus.Discovery).Result.Count + 1}";
+        var name = $"{student.UserName}'s Discovery #{GetAllPotionsOfStudent(student.Id, BrewingStatus.Discovery).Result.Count + 1}";
         var potionRecipe = new Recipe { Ingredients = ingredients, Name = name, Student = student };
         var potion = new Potion
         {
@@ -62,15 +62,15 @@ public class PotionService : IPotionService
            _context.SaveChanges();
            return await Task.FromResult(potion);
         }
-        potion.Name = $"{student.Name}'s Replica #{GetAllPotionsOfStudent(student.ID, BrewingStatus.Replica).Result.Count + 1}";
+        potion.Name = $"{student.UserName}'s Replica #{GetAllPotionsOfStudent(student.Id, BrewingStatus.Replica).Result.Count + 1}";
         _context.Potions.Add(potion);
         await _context.SaveChangesAsync();
         return await Task.FromResult(potion);
     }
 
-    public async Task<List<Potion>> GetAllPotionsOfStudent(long studentId, BrewingStatus brewingStatus)
+    public async Task<List<Potion>> GetAllPotionsOfStudent(string studentId, BrewingStatus brewingStatus)
     {
-        var potions = await _context.Potions.Where(potion => potion.BrewerStudent.ID == studentId).ToListAsync();
+        var potions = await _context.Potions.Where(potion => potion.BrewerStudent.Id == studentId).ToListAsync();
         return  potions.Where(potion => potion.BrewingStatus == brewingStatus).ToList();
     }
 
@@ -164,9 +164,9 @@ public class PotionService : IPotionService
         return null;
     }
 
-    public Task<Potion> BrewPotionSlowly(long id)
+    public Task<Potion> BrewPotionSlowly(string id)
     {
-        var student = _context.Students.First(p => p.ID == id);
+        var student = _context.Students.First(p => p.Id == id);
         var potion = new Potion { BrewerStudent = student, BrewingStatus = BrewingStatus.Brew, Recipe = new Recipe() };
         _context.Potions.Add(potion);
         _context.SaveChanges();

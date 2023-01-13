@@ -21,7 +21,7 @@ public class StudentService : IStudentService
     {
         string hashedPassword = PasswordHash.HashPassword(loginForm.Password);
 
-        return _context.Students.AsEnumerable().Any(u => u.Name == loginForm.Username && FixedTimeEquals(u.Password, hashedPassword));
+        return _context.Students.AsEnumerable().Any(u => u.UserName == loginForm.Username && FixedTimeEquals(u.PasswordHash, hashedPassword));
     }
 
     private bool FixedTimeEquals(string str1, string str2)
@@ -34,15 +34,15 @@ public class StudentService : IStudentService
     }
     private bool CheckRegistrationStatus(string name)
     {
-        var u = _context.Students.FirstOrDefault(u => u.Name == name);
+        var u = _context.Students.FirstOrDefault(u => u.UserName == name);
         return u == null;
     }
 
     public bool Register(Student user)
     {
-        if (CheckRegistrationStatus(user.Name))
+        if (CheckRegistrationStatus(user.UserName))
         {
-            user.Password = PasswordHash.HashPassword(user.Password);
+
             _context.Students.Add(user);
             _context.SaveChanges();
             return true;
@@ -53,7 +53,7 @@ public class StudentService : IStudentService
 
     public Student GetStudent(string username)
     {
-        var student = _context.Students.FirstOrDefault(p => p.Name == username);
+        var student = _context.Students.FirstOrDefault(p => p.UserName == username);
         if (student == null)
         {
             //TODO add Error logging
