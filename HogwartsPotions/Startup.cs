@@ -3,11 +3,13 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using HogwartsPotions.Data;
 using HogwartsPotions.Helpers;
+using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Services.Interfaces;
 using HogwartsPotions.Services;
 using log4net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +34,17 @@ namespace HogwartsPotions
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 options.EnableSensitiveDataLogging();
             });
+            services.AddDefaultIdentity<Student>
+                (options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireLowercase = false;
+                })
+                .AddEntityFrameworkStores<HogwartsContext>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSession();
             services.AddControllersWithViews();
@@ -61,6 +74,7 @@ namespace HogwartsPotions
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             log4net.Config.XmlConfigurator.Configure();
             AppDomain.CurrentDomain.FirstChanceException += (s, e) =>
