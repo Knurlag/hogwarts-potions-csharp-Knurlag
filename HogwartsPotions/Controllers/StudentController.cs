@@ -9,6 +9,7 @@ using HogwartsPotions.Models;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
 using HogwartsPotions.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,13 @@ namespace HogwartsPotions.Controllers
     {
         private readonly IStudentService _studentService;
         private readonly UserManager<Student> _userManager;
+        private readonly SignInManager<Student> _signInManager;
 
-        public StudentController(IStudentService studentService, UserManager<Student> userManager)
+        public StudentController(IStudentService studentService, UserManager<Student> userManager, SignInManager<Student> signInManager)
         {
             _studentService = studentService;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
         public IActionResult Index()
         {
@@ -32,17 +35,16 @@ namespace HogwartsPotions.Controllers
             return View();
         }
 
-        public IActionResult ValidateLogin(string username, string password)
+        public async Task<IActionResult> ValidateLogin(LoginForm loginForm)
         {
-            LoginForm loginForm = new LoginForm(username, password);
-            if (username != null && password != null)
-            {
-                if (_studentService.ValidateLogin(loginForm))
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            var result = await _signInManager.PasswordSignInAsync(loginForm.Username, loginForm.Password, isPersistent: false, lockoutOnFailure: false);
+            if (result.Succeeded)
                 {
-                    SessionHelper.SetObjectAsJson(HttpContext.Session, "username", username);
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "username", loginForm.Username);
                     return RedirectToAction("Index", "Home");
                 }
-            }
 
 
             var message = "Please enter the correct credentials!";
