@@ -5,11 +5,9 @@ namespace HogwartsPotions.Models;
 
 public class LoginForm
 {
-    public string Username { get; }
-    public string Password { get; }
-    public LoginForm(string username, string password)
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public LoginForm()
     {
-        this.Username = username;
-        this.Password = password;
     }
 }
