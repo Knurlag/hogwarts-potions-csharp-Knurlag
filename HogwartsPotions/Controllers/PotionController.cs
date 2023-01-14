@@ -12,9 +12,11 @@ using Microsoft.AspNetCore.Http;
 using HogwartsPotions.Data;
 using HogwartsPotions.Services;
 using HogwartsPotions.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HogwartsPotions.Controllers
 {
+    [Authorize]
     public class PotionController : Controller
     {
         private readonly IPotionService _service;

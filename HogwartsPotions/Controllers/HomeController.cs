@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HogwartsPotions.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         [Route("Home")]

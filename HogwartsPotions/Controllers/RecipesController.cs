@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
 using HogwartsPotions.Data;
 using HogwartsPotions.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HogwartsPotions.Controllers
 {
+    [Authorize]
     public class RecipesController : Controller
     {
         private readonly IPotionService _service;

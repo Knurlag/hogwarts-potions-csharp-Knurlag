@@ -57,6 +57,8 @@ namespace HogwartsPotions.Controllers
 
             Student user = new Student() { UserName = registerForm.Username, HouseType = registerForm.HouseType, PetType = registerForm.PetType};
             var result = await _userManager.CreateAsync(user, registerForm.Password);
+            var student = await _userManager.FindByNameAsync(user.UserName);
+            await _userManager.AddToRoleAsync(student, "Student");
             if (result.Succeeded)
             {
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "username", registerForm.Username);
