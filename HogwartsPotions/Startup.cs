@@ -45,15 +45,25 @@ namespace HogwartsPotions
                     options.Password.RequireLowercase = false;
                 })
                 .AddEntityFrameworkStores<HogwartsContext>();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.LoginPath = "/Student/Index";
+                options.AccessDeniedPath = "/Student/AccesDenied";
+                options.SlidingExpiration = true;
+            });
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSession();
-            services.AddControllersWithViews();
+
+            services.AddControllersWithViews().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); ;
             services.AddTransient<IPotionService, PotionService>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IRoomService, RoomService>();
             services.AddTransient<IIngredientService, IngredientService>();
-            services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+            //services.AddControllers().AddJsonOptions(x =>
+            //    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,8 +84,6 @@ namespace HogwartsPotions
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
             log4net.Config.XmlConfigurator.Configure();
             AppDomain.CurrentDomain.FirstChanceException += (s, e) =>
             {
@@ -86,6 +94,8 @@ namespace HogwartsPotions
                     logger.ErrorFormat("Exception Thrown: {0}\n{1}", exception.Message, exception.StackTrace);
                 }
             };
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
