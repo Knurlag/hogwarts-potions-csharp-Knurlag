@@ -34,10 +34,8 @@ namespace HogwartsPotions.Controllers
             ViewBag.PetTypes = new PetType[] {PetType.Cat, PetType.Owl, PetType.Rat, PetType.None};
             return View();
         }
-
         public async Task<IActionResult> ValidateLogin(LoginForm loginForm)
         {
-            // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             var result = await _signInManager.PasswordSignInAsync(loginForm.Username, loginForm.Password, isPersistent: false, lockoutOnFailure: false);
             if (result.Succeeded)
@@ -51,7 +49,6 @@ namespace HogwartsPotions.Controllers
             HttpContext.Session.SetString("message", message);
             return RedirectToAction("Index");
         }
-
         public async Task<IActionResult> Register(RegisterForm registerForm)
         {
 
@@ -74,9 +71,10 @@ namespace HogwartsPotions.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             HttpContext.Session.Remove("username");
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             return RedirectToAction("Index", "Student");
         }
 
