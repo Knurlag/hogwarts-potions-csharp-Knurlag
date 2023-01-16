@@ -2,7 +2,6 @@ using System;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using HogwartsPotions.Data;
-using HogwartsPotions.Helpers;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Services.Interfaces;
 using HogwartsPotions.Services;
@@ -14,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace HogwartsPotions
 {
@@ -44,18 +43,18 @@ namespace HogwartsPotions
                     options.Password.RequireUppercase = true;
                     options.Password.RequireLowercase = false;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<HogwartsContext>();
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 options.LoginPath = "/Student/Index";
                 options.AccessDeniedPath = "/Student/AccesDenied";
                 options.SlidingExpiration = true;
             });
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSession();
-
             services.AddControllersWithViews().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); ;
             services.AddTransient<IPotionService, PotionService>();
