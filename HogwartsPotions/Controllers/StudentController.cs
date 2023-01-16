@@ -42,7 +42,7 @@ namespace HogwartsPotions.Controllers
         }
         public async Task<IActionResult> ValidateLogin(LoginForm loginForm)
         {
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            await HttpContext.SignOutAsync("Identity.Application");
             var result = await _signInManager.PasswordSignInAsync(loginForm.Username, loginForm.Password, isPersistent: true, lockoutOnFailure: false);
             if (result.Succeeded)
                 {
@@ -80,7 +80,7 @@ namespace HogwartsPotions.Controllers
         public async Task<IActionResult> Logout()
         {
             HttpContext.Session.Remove("username");
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            await HttpContext.SignOutAsync("Identity.Application");
             return RedirectToAction("Index", "Student");
         }
 
