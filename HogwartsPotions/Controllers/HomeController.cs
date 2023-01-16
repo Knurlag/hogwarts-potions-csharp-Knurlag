@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HogwartsPotions.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student")]
     public class HomeController : Controller
     {
         [Route("Home")]

@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HogwartsPotions.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student")]
     public class PotionController : Controller
     {
         private readonly IPotionService _service;

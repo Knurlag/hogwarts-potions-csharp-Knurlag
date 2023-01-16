@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HogwartsPotions.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Student")]
     public class RecipesController : Controller
     {
         private readonly IPotionService _service;
