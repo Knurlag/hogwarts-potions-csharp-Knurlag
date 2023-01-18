@@ -20,17 +20,16 @@ namespace HogwartsPotions.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly IStudentService _studentService;
         private readonly UserManager<Student> _userManager;
         private readonly SignInManager<Student> _signInManager;
 
-        public StudentController(IStudentService studentService, UserManager<Student> userManager, SignInManager<Student> signInManager)
+        public StudentController(UserManager<Student> userManager, SignInManager<Student> signInManager)
         {
-            _studentService = studentService;
+
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
             if (HttpContext.Request.Cookies.ContainsKey(".AspNetCore.Identity.Application"))
             {
@@ -46,7 +45,7 @@ namespace HogwartsPotions.Controllers
             var result = await _signInManager.PasswordSignInAsync(loginForm.Username, loginForm.Password, isPersistent: true, lockoutOnFailure: false);
             if (result.Succeeded)
                 {
-                    SessionHelper.SetObjectAsJson(HttpContext.Session, "username", loginForm.Username);
+                    //SessionHelper.SetObjectAsJson(HttpContext.Session, "username", loginForm.Username);
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -64,7 +63,7 @@ namespace HogwartsPotions.Controllers
             await _userManager.AddToRoleAsync(student, "Student");
             if (result.Succeeded)
             {
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "username", registerForm.Username);
+                //SessionHelper.SetObjectAsJson(HttpContext.Session, "username", registerForm.Username);
                 return RedirectToAction("Index", "Student");
             }
             var message = "";
@@ -72,7 +71,6 @@ namespace HogwartsPotions.Controllers
             {
                 message += error.Description;
             }
-
             HttpContext.Session.SetString("message", message);
             return RedirectToAction("Index");
         }
