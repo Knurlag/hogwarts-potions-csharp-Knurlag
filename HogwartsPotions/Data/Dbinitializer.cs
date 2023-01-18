@@ -28,29 +28,19 @@ namespace HogwartsPotions.data
             {
                 roleManager.CreateAsync(new IdentityRole("Student"));
             }
-            var rooms = new Room[]
-            {
-                new Room{Capacity = 5},
-                new Room{Capacity = 5}
-            };
-
-            foreach (Room r in rooms)
-            {
-                context.Rooms.Add(r);
-            }
             context.SaveChanges();
             var students = new Student[]
             {
-                new Student{UserName= "Carson Alexander",HouseType = HouseType.Gryffindor, PetType = PetType.Cat, Room = rooms[0]},
-                new Student{UserName="Meredith Alonso",HouseType = HouseType.Gryffindor, PetType = PetType.Owl, Room = rooms[0]},
-                new Student{UserName="Arturo Anand",HouseType = HouseType.Gryffindor, PetType = PetType.Rat, Room = rooms[0]},
-                new Student{UserName="Gytis Barzdukas",HouseType = HouseType.Gryffindor, PetType = PetType.Cat, Room = rooms[0]},
-                new Student{UserName="Yan Li",HouseType = HouseType.Gryffindor, PetType = PetType.Rat, Room = rooms[0]},
-                new Student{UserName="Peggy Justice",HouseType = HouseType.Slytherin, PetType = PetType.Cat, Room = rooms[1]},
-                new Student{UserName="Laura Alexander",HouseType = HouseType.Slytherin, PetType = PetType.None, Room = rooms[1]},
-                new Student{UserName="Nino Alexander",HouseType = HouseType.Slytherin, PetType = PetType.Owl, Room = rooms[1]},
-                new Student{UserName="Arturo Olivetto",HouseType = HouseType.Slytherin, PetType = PetType.Owl, Room = rooms[1]},
-                new Student{UserName="Carson Norman",HouseType = HouseType.Slytherin, PetType = PetType.Cat, Room = rooms[1]},
+                new Student{UserName= "Carson Alexander",HouseType = HouseType.Gryffindor, PetType = PetType.Cat},
+                new Student{UserName="Meredith Alonso",HouseType = HouseType.Gryffindor, PetType = PetType.Owl},
+                new Student{UserName="Arturo Anand",HouseType = HouseType.Gryffindor, PetType = PetType.Rat},
+                new Student{UserName="Gytis Barzdukas",HouseType = HouseType.Gryffindor, PetType = PetType.Cat},
+                new Student{UserName="Yan Li",HouseType = HouseType.Gryffindor, PetType = PetType.Rat},
+                new Student{UserName="Peggy Justice",HouseType = HouseType.Slytherin, PetType = PetType.Cat},
+                new Student{UserName="Laura Alexander",HouseType = HouseType.Slytherin, PetType = PetType.None},
+                new Student{UserName="Nino Alexander",HouseType = HouseType.Slytherin, PetType = PetType.Owl},
+                new Student{UserName="Arturo Olivetto",HouseType = HouseType.Slytherin, PetType = PetType.Owl},
+                new Student{UserName="Carson Norman",HouseType = HouseType.Slytherin, PetType = PetType.Cat},
             };
             foreach (Student s in students)
             {
