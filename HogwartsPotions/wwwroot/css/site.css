@@ -305,3 +305,11 @@ input {
     color: antiquewhite;
     letter-spacing: 2px;
 }
+
+.logout {
+    position: absolute;
+    top: 96%;
+    left: 95%;
+    font-size: 24px;
+    letter-spacing: 2px;
+}
