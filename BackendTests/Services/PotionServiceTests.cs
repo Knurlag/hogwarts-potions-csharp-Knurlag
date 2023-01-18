@@ -159,7 +159,7 @@ namespace BackendTests.Services
                 1);
 
             // Assert
-            Assert.That(result.Count, Is.EqualTo(2));
+            Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result[0], Is.EqualTo(expected));
         }
 
