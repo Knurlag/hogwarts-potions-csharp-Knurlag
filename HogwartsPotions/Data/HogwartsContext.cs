@@ -19,7 +19,6 @@ namespace HogwartsPotions.Data
     {
         public int MaxIngredientsForPotions = 5;
         public DbSet<Student> Students { get; set; }
-        public DbSet<Room> Rooms { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
 
@@ -36,7 +35,6 @@ namespace HogwartsPotions.Data
             {
                 entity.ToTable("Students");
             });
-            modelBuilder.Entity<Room>().ToTable("Rooms");
             modelBuilder.Entity<Ingredient>().ToTable("Ingredients");
             modelBuilder.Entity<Recipe>().ToTable("Recipes");
             modelBuilder.Entity<Potion>().ToTable("Potions");

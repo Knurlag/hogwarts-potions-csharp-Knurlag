@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HogwartsPotions.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
@@ -16,7 +17,7 @@ namespace BackendTests.Controllers
         public void SetUp()
         {
             this.context = new Initialize();
-            this.subPotionController = new PotionController(this.context.HogwartsContext);
+            this.subPotionController = new PotionController(new PotionService(context.HogwartsContext), new IngredientService(context.HogwartsContext), new StudentService(context.HogwartsContext));
         }
 
 
