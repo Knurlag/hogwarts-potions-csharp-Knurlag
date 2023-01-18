@@ -17,40 +17,6 @@ public class StudentService : IStudentService
     {
         _context = context;
     }
-    public bool ValidateLogin(LoginForm loginForm)
-    {
-        string hashedPassword = PasswordHash.HashPassword(loginForm.Password);
-
-        return _context.Students.AsEnumerable().Any(u => u.UserName == loginForm.Username && FixedTimeEquals(u.PasswordHash, hashedPassword));
-    }
-
-    private bool FixedTimeEquals(string str1, string str2)
-    {
-        if (str1 == null || str2 == null)
-        {
-            return false;
-        }
-        return CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(str1), Encoding.UTF8.GetBytes(str2));
-    }
-    private bool CheckRegistrationStatus(string name)
-    {
-        var u = _context.Students.FirstOrDefault(u => u.UserName == name);
-        return u == null;
-    }
-
-    public bool Register(Student user)
-    {
-        if (CheckRegistrationStatus(user.UserName))
-        {
-
-            _context.Students.Add(user);
-            _context.SaveChanges();
-            return true;
-        }
-
-        return false;
-    }
-
     public Student GetStudent(string username)
     {
         var student = _context.Students.FirstOrDefault(p => p.UserName == username);
