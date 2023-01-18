@@ -14,7 +14,7 @@ public interface IPotionService
     Task<List<Recipe>> GetHelp(long id);
     Task<Potion> BrewPotionSlowly(string id);
     Task<Potion> GetPotionById(long? id);
-    void Update(Potion potion);
+    Task<bool> Update(Potion potion);
     void RemovePotion(Potion potion);
     Task<List<Recipe>> GetAllRecipes();
 }
