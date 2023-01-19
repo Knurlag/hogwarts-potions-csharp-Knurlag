@@ -41,7 +41,7 @@ namespace HogwartsPotions.Controllers
         // GET: Potion/Details/5
         public async Task<IActionResult> Details(long? id)
         {
-            if (id == null || _service.GetAllPotions() == null)
+            if (id == null || await _service.GetAllPotions() == null)
             {
                 return NotFound();
             }
@@ -162,7 +162,7 @@ namespace HogwartsPotions.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            if (_service.GetAllPotions().Result == null)
+            if (_service.ArePotionsNull())
             {
                 return Problem("Entity set 'HogwartsContext.Potions'  is null.");
             }
