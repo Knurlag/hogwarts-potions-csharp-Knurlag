@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using HogwartsPotions.Data;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
@@ -12,7 +13,7 @@ namespace HogwartsPotions.data
 {
     public static class DbInitializer
     {
-        public static void Initialize(HogwartsContext context)
+        public static async Task Initialize(HogwartsContext context)
         {
             context.Database.EnsureCreated();
 
@@ -26,9 +27,10 @@ namespace HogwartsPotions.data
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context), roleValidators, new UpperInvariantLookupNormalizer(), new IdentityErrorDescriber(), null);
             if (!roleManager.RoleExistsAsync("Student").Result)
             {
-                roleManager.CreateAsync(new IdentityRole("Student"));
+                var result = await roleManager.CreateAsync(new IdentityRole("Student"));
             }
-            context.SaveChanges();
+            await context.SaveChangesAsync();
+
             var students = new Student[]
             {
                 new Student{UserName= "Carson Alexander",HouseType = HouseType.Gryffindor, PetType = PetType.Cat},
@@ -47,7 +49,7 @@ namespace HogwartsPotions.data
                 context.Students.Add(s);
 
             }
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
 
             var ingredients = new Ingredient[]
@@ -157,7 +159,7 @@ namespace HogwartsPotions.data
                 context.Ingredients.Add(ingredient);
 
             }
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             var recipes = new Recipe[]
             {
                 new Recipe{Name = "Potions 1 recipe",Ingredients = new List<Ingredient> { ingredients[0],
@@ -178,7 +180,7 @@ namespace HogwartsPotions.data
                 context.Recipes.Add(recipe);
 
             }
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
 
 
@@ -202,7 +204,7 @@ namespace HogwartsPotions.data
 
             }
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }
