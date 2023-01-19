@@ -42,6 +42,11 @@ namespace HogwartsPotions.Controllers
         public async Task<IActionResult> ValidateLogin(LoginForm loginForm)
         {
             await HttpContext.SignOutAsync("Identity.Application");
+            if (loginForm == null)
+            {
+                HttpContext.Session.SetString("message", "Please enter the correct credentials!");
+                return RedirectToAction("Index");
+            }
             var result = await _signInManager.PasswordSignInAsync(loginForm.Username, loginForm.Password, isPersistent: true, lockoutOnFailure: false);
             if (result.Succeeded)
                 {
@@ -56,7 +61,11 @@ namespace HogwartsPotions.Controllers
         }
         public async Task<IActionResult> Register(RegisterForm registerForm)
         {
-
+            if (registerForm == null)
+            {
+                HttpContext.Session.SetString("message", "Please enter a username and a password");
+                return RedirectToAction("Index");
+            }
             Student user = new Student() { UserName = registerForm.Username, HouseType = registerForm.HouseType, PetType = registerForm.PetType};
             var result = await _userManager.CreateAsync(user, registerForm.Password);
             Student student = await _userManager.FindByNameAsync(user.UserName);
