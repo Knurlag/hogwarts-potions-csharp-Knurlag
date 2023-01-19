@@ -12,9 +12,11 @@ namespace BackendTests.Services
         private HogwartsContext subHogwartsContext;
 
         [SetUp]
-        public void SetUp()
+        public async Task SetUp()
         {
-            this.subHogwartsContext = new Initialize().HogwartsContext;
+            var init = new Initialize();
+            this.subHogwartsContext = init.HogwartsContext;
+            await init.InitializeDb(subHogwartsContext);
         }
 
         private IngredientService CreateService()
@@ -39,7 +41,7 @@ namespace BackendTests.Services
         }
 
         [Test]
-        public void GetIngredientByName_StateUnderTest_ExpectedBehavior()
+        public void GetIngredientByName_Test()
         {
             // Arrange
             var service = this.CreateService();
@@ -54,7 +56,7 @@ namespace BackendTests.Services
         }
 
         [Test]
-        public void GetAllIngredients_StateUnderTest_ExpectedBehavior()
+        public void GetAllIngredients_Test()
         {
             // Arrange
             var service = this.CreateService();
