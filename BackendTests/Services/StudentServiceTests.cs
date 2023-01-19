@@ -12,13 +12,16 @@ namespace BackendTests.Services
         private HogwartsContext subHogwartsContext;
 
         [SetUp]
-        public void SetUp()
+        public async Task SetUp()
         {
-            this.subHogwartsContext = new Initialize().HogwartsContext;
+            var init = new Initialize();
+            this.subHogwartsContext = init.HogwartsContext;
+            await init.InitializeDb(subHogwartsContext);
         }
 
         private StudentService CreateService()
         {
+            this.subHogwartsContext = new Initialize().HogwartsContext;
             return new StudentService(
                 this.subHogwartsContext);
         }
