@@ -23,6 +23,11 @@ public class PotionService : IPotionService
         return await _context.Potions.Include(potion => potion.Recipe).Include(potion => potion.BrewerStudent).ToListAsync();
     }
 
+    public bool ArePotionsNull()
+    {
+        return _context.Potions == null;
+    }
+
     public async Task<Potion> BrewPotion(Student student, List<Ingredient> ingredients)
     {
         var status = BrewingStatus.Discovery;

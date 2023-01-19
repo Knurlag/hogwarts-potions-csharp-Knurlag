@@ -4,6 +4,8 @@ using NSubstitute;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BackendTests.Services
 {
@@ -14,15 +16,18 @@ namespace BackendTests.Services
         private StudentService studentService;
         private IngredientService ingredientService;
         [SetUp]
-        public void SetUp()
-        {
-            this.subHogwartsContext = new Initialize().HogwartsContext;
+        public async Task SetUp()
+        { 
+            var init = new Initialize();
+            this.subHogwartsContext = init.HogwartsContext;
+            await init.InitializeDb(subHogwartsContext);
             this.studentService = new StudentService(subHogwartsContext);
             this.ingredientService = new IngredientService(subHogwartsContext);
         }
 
         private PotionService CreateService()
         {
+            
             return new PotionService(
                 this.subHogwartsContext);
         }
@@ -159,17 +164,17 @@ namespace BackendTests.Services
                 1);
 
             // Assert
-            Assert.That(result.Count, Is.EqualTo(2));
+            Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result[0], Is.EqualTo(expected));
         }
 
 
 
         [Test]
-        public async Task GetPotionById_Test()
+        public void GetPotionById_Test()
         {
             // Arrange
-            var service = this.CreateService();
+            var service =  this.CreateService();
             var expected = subHogwartsContext.Potions.ToList()[0];
 
             // Act
@@ -209,10 +214,11 @@ namespace BackendTests.Services
             // Assert
             Assert.That(result, Is.EqualTo(subHogwartsContext.Recipes.ToList()));
         }
+
         [TearDown]
-        public void TearDown()
+        public async Task TearDown()
         {
-            subHogwartsContext.Database.EnsureDeleted();
+            await subHogwartsContext.Database.EnsureDeletedAsync();
         }
     }
 }

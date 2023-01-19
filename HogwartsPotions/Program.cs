@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using HogwartsPotions.data;
 using HogwartsPotions.Data;
 using log4net;
@@ -16,16 +17,16 @@ namespace HogwartsPotions
     public class Program
     {
         private static ILog logger = LogManager.GetLogger("logger");
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
 
             var host = CreateHostBuilder(args).Build();
-            CreateDbIfNotExists(host);
+            await CreateDbIfNotExists(host);
             host.Run();
         }
 
 
-        private static void CreateDbIfNotExists(IHost host)
+        private static async Task CreateDbIfNotExists(IHost host)
         {
             using (var scope = host.Services.CreateScope())
             {
@@ -33,7 +34,7 @@ namespace HogwartsPotions
                 try
                 {
                     var context = services.GetRequiredService<HogwartsContext>();
-                    DbInitializer.Initialize(context);
+                    await DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {
