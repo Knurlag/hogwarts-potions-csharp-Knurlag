@@ -39,6 +39,7 @@ namespace HogwartsPotions.Controllers
             ViewBag.PetTypes = new PetType[] {PetType.Cat, PetType.Owl, PetType.Rat, PetType.None};
             return View();
         }
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ValidateLogin(LoginForm loginForm)
         {
             await HttpContext.SignOutAsync("Identity.Application");
@@ -59,6 +60,7 @@ namespace HogwartsPotions.Controllers
             HttpContext.Session.SetString("message", message);
             return RedirectToAction("Index");
         }
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterForm registerForm)
         {
             if (registerForm == null)
