@@ -8,6 +8,7 @@ using HogwartsPotions.Services;
 using log4net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,7 +32,6 @@ namespace HogwartsPotions
             services.AddDbContext<HogwartsContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                options.EnableSensitiveDataLogging();
             });
             services.AddDefaultIdentity<Student>
                 (options =>
@@ -48,18 +48,28 @@ namespace HogwartsPotions
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 options.LoginPath = "/Student/Index";
                 options.AccessDeniedPath = "/Student/AccesDenied";
                 options.SlidingExpiration = true;
             });
+            services.AddAntiforgery(options =>
+            {
+                options.FormFieldName = "AntiForgeryField";
+                options.HeaderName = "AntiForgeryHeader";
+                options.Cookie.Name = "AntiForgeryCookie";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
             services.AddControllersWithViews().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); ;
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
             services.AddTransient<IPotionService, PotionService>();
             services.AddTransient<IStudentService, StudentService>();
-            services.AddTransient<IRoomService, RoomService>();
             services.AddTransient<IIngredientService, IngredientService>();
             //services.AddControllers().AddJsonOptions(x =>
             //    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
@@ -70,8 +80,8 @@ namespace HogwartsPotions
         {
             if (env.IsDevelopment())
             {
-                
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/Home/Error");
             }
             else
             {
@@ -79,6 +89,13 @@ namespace HogwartsPotions
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("Content-Security-Policy", "default-src 'self' https://localhost:5001/ style-src 'unsafe-inline'  ");
+                context.Response.Headers.Add("Strict-Transport-Security","max-age=31536000; includeSubDomains; preload ");
+                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                await next();
+            });
             app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

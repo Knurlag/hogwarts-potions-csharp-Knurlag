@@ -13,6 +13,7 @@
     <div id="login-form">
         <form method="post" action="@Url.Action("ValidateLogin", "Student")">
             <fieldset class="form-style-1" style="background-image: url(/images/pergamen.jpg);">
+                    @Html.AntiForgeryToken()
                 <label class="label-form" for="login-username">Username</label>
                 <input type="text" name="username" id="login-username"class="form" size="20">
                 <label class="label-form" for="login-password">Password</label>
@@ -27,6 +28,7 @@
     <div id="register-form" hidden="hidden">
         <form method="post" action="@Url.Action("Register", "Student")">
             <fieldset class="form-style-1" style="background-image: url(/images/pergamen.jpg);">
+                    @Html.AntiForgeryToken()
                 <label class="label-form" for="register-username">Username</label>
                 <input type="text" name="username" id="register-username" class="form" size="20">
                 <label class="label-form" for="register-password">Password</label>

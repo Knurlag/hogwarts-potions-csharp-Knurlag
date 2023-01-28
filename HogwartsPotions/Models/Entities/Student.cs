@@ -9,6 +9,5 @@ namespace HogwartsPotions.Models.Entities
         public HouseType HouseType { get; set; }
         public PetType PetType { get; set; }
         
-        public Room Room { get; set; }
     }
 }

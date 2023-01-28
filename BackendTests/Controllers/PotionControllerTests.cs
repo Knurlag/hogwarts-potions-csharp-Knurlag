@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HogwartsPotions.Data;
+using HogwartsPotions.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
@@ -8,25 +10,25 @@ namespace BackendTests.Controllers
     [TestFixture]
     public class PotionControllerTests
     {
-        private Initialize context;
+        private HogwartsContext context;
 
         private PotionController subPotionController;
 
         [SetUp]
-        public void SetUp()
+        public async Task SetUp()
         {
-            this.context = new Initialize();
-            this.subPotionController = new PotionController(this.context.HogwartsContext);
+            var init = new Initialize();
+            this.context = init.HogwartsContext;
+            await init.InitializeDb(context);
+            this.subPotionController = new PotionController(new PotionService(context), new IngredientService(context), new StudentService(context));
         }
-
-
 
         [Test]
         public async Task Details_Test()
         {
             // Arrange
-            long? id = 1;
-            var potion =  context.HogwartsContext.Potions
+            long? id = 2;
+            var potion =  context.Potions
                 .Include(p => p.Ingredients)
                 .FirstOrDefaultAsync(m => m.ID == id).Result;
             // Act
@@ -40,6 +42,7 @@ namespace BackendTests.Controllers
         [Test]
         public async Task Details_nullId_Test()
         {
+
             // Arrange
             long? id = null;
             // Act
@@ -62,16 +65,16 @@ namespace BackendTests.Controllers
         public async Task Edit_Test()
         {
             // Arrange
-            long id = 1;
+            long id = 2;
             
-            var potion = context.HogwartsContext.Potions
+            var potion = context.Potions
                 .Include(p => p.Ingredients)
                 .FirstOrDefaultAsync(m => m.ID == id).Result;
 
             // Act
             potion.Name = "test";
              await subPotionController.Edit(id, potion);
-            var resultpotion = context.HogwartsContext.Potions
+            var resultpotion = context.Potions
                 .Include(p => p.Ingredients)
                 .FirstOrDefaultAsync(m => m.ID == id).Result;
             // Assert
@@ -84,7 +87,7 @@ namespace BackendTests.Controllers
             // Arrange
             long id = 1;
 
-            var potion = context.HogwartsContext.Potions
+            var potion = context.Potions
                 .Include(p => p.Ingredients)
                 .FirstOrDefaultAsync(m => m.ID == id).Result;
 
@@ -105,7 +108,7 @@ namespace BackendTests.Controllers
 
             // Act
              await subPotionController.DeleteConfirmed(id);
-            var result = context.HogwartsContext.Potions
+            var result = context.Potions
                 .Include(p => p.Ingredients)
                 .FirstOrDefaultAsync(m => m.ID == id).Result;
             // Assert
@@ -116,7 +119,7 @@ namespace BackendTests.Controllers
         public async Task DeleteConfirmed_NullDb_Test()
         {
             // Arrange
-            context.HogwartsContext.Potions = null;
+            context.Potions = null;
             long id = 1;
             var expected = new ProblemDetails();
             expected.Detail = "Entity set 'HogwartsContext.Potions'  is null.";
@@ -128,9 +131,9 @@ namespace BackendTests.Controllers
         }
 
         [TearDown]
-        public void TearDown()
+        public async Task TearDown()
         {
-            context.HogwartsContext.Database.EnsureDeleted();
+            await context.Database.EnsureDeletedAsync();
         }
     }
 }

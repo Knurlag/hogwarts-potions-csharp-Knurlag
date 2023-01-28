@@ -23,20 +23,26 @@ public class PotionService : IPotionService
         return await _context.Potions.Include(potion => potion.Recipe).Include(potion => potion.BrewerStudent).ToListAsync();
     }
 
+    public bool ArePotionsNull()
+    {
+        return _context.Potions == null;
+    }
+
     public async Task<Potion> BrewPotion(Student student, List<Ingredient> ingredients)
     {
         var status = BrewingStatus.Discovery;
         foreach (var recipe in _context.Recipes.Include(recipe => recipe.Ingredients))
         {
-            var index = -1;
+            var index = 0;
             var ingredientCounter = 0;
             foreach (var ingredient in ingredients)
             {
-                index++;
                 if (ingredient.Name == recipe.Ingredients[index].Name)
                 {
                     ingredientCounter++;
                 }
+
+                index++;
             }
 
             if (ingredientCounter == 5)
@@ -178,10 +184,11 @@ public class PotionService : IPotionService
         return await _context.Potions.Include(potion => potion.Ingredients).FirstOrDefaultAsync(potion => potion.ID == id);
     }
 
-    public void Update(Potion potion)
+    public async Task<bool> Update(Potion potion)
     {
         _context.Update(potion);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+        return true;
     }
 
     public void RemovePotion(Potion potion)

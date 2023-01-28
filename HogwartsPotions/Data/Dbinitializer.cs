@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using HogwartsPotions.Data;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
@@ -12,7 +13,7 @@ namespace HogwartsPotions.data
 {
     public static class DbInitializer
     {
-        public static void Initialize(HogwartsContext context)
+        public static async Task Initialize(HogwartsContext context)
         {
             context.Database.EnsureCreated();
 
@@ -26,38 +27,29 @@ namespace HogwartsPotions.data
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context), roleValidators, new UpperInvariantLookupNormalizer(), new IdentityErrorDescriber(), null);
             if (!roleManager.RoleExistsAsync("Student").Result)
             {
-                roleManager.CreateAsync(new IdentityRole("Student"));
+                var result = await roleManager.CreateAsync(new IdentityRole("Student"));
             }
-            var rooms = new Room[]
-            {
-                new Room{Capacity = 5},
-                new Room{Capacity = 5}
-            };
+            await context.SaveChangesAsync();
 
-            foreach (Room r in rooms)
-            {
-                context.Rooms.Add(r);
-            }
-            context.SaveChanges();
             var students = new Student[]
             {
-                new Student{UserName= "Carson Alexander",HouseType = HouseType.Gryffindor, PetType = PetType.Cat, Room = rooms[0]},
-                new Student{UserName="Meredith Alonso",HouseType = HouseType.Gryffindor, PetType = PetType.Owl, Room = rooms[0]},
-                new Student{UserName="Arturo Anand",HouseType = HouseType.Gryffindor, PetType = PetType.Rat, Room = rooms[0]},
-                new Student{UserName="Gytis Barzdukas",HouseType = HouseType.Gryffindor, PetType = PetType.Cat, Room = rooms[0]},
-                new Student{UserName="Yan Li",HouseType = HouseType.Gryffindor, PetType = PetType.Rat, Room = rooms[0]},
-                new Student{UserName="Peggy Justice",HouseType = HouseType.Slytherin, PetType = PetType.Cat, Room = rooms[1]},
-                new Student{UserName="Laura Alexander",HouseType = HouseType.Slytherin, PetType = PetType.None, Room = rooms[1]},
-                new Student{UserName="Nino Alexander",HouseType = HouseType.Slytherin, PetType = PetType.Owl, Room = rooms[1]},
-                new Student{UserName="Arturo Olivetto",HouseType = HouseType.Slytherin, PetType = PetType.Owl, Room = rooms[1]},
-                new Student{UserName="Carson Norman",HouseType = HouseType.Slytherin, PetType = PetType.Cat, Room = rooms[1]},
+                new Student{UserName= "Carson Alexander",HouseType = HouseType.Gryffindor, PetType = PetType.Cat},
+                new Student{UserName="Meredith Alonso",HouseType = HouseType.Gryffindor, PetType = PetType.Owl},
+                new Student{UserName="Arturo Anand",HouseType = HouseType.Gryffindor, PetType = PetType.Rat},
+                new Student{UserName="Gytis Barzdukas",HouseType = HouseType.Gryffindor, PetType = PetType.Cat},
+                new Student{UserName="Yan Li",HouseType = HouseType.Gryffindor, PetType = PetType.Rat},
+                new Student{UserName="Peggy Justice",HouseType = HouseType.Slytherin, PetType = PetType.Cat},
+                new Student{UserName="Laura Alexander",HouseType = HouseType.Slytherin, PetType = PetType.None},
+                new Student{UserName="Nino Alexander",HouseType = HouseType.Slytherin, PetType = PetType.Owl},
+                new Student{UserName="Arturo Olivetto",HouseType = HouseType.Slytherin, PetType = PetType.Owl},
+                new Student{UserName="Carson Norman",HouseType = HouseType.Slytherin, PetType = PetType.Cat},
             };
             foreach (Student s in students)
             {
                 context.Students.Add(s);
 
             }
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
 
             var ingredients = new Ingredient[]
@@ -167,7 +159,7 @@ namespace HogwartsPotions.data
                 context.Ingredients.Add(ingredient);
 
             }
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             var recipes = new Recipe[]
             {
                 new Recipe{Name = "Potions 1 recipe",Ingredients = new List<Ingredient> { ingredients[0],
@@ -188,7 +180,7 @@ namespace HogwartsPotions.data
                 context.Recipes.Add(recipe);
 
             }
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
 
 
@@ -212,7 +204,7 @@ namespace HogwartsPotions.data
 
             }
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }
