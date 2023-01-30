@@ -89,13 +89,13 @@ namespace HogwartsPotions
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.Use(async (context, next) =>
-            {
-                context.Response.Headers.Add("Content-Security-Policy", "default-src 'self' https://localhost:5001/ style-src 'unsafe-inline'  ");
-                context.Response.Headers.Add("Strict-Transport-Security","max-age=31536000; includeSubDomains; preload ");
-                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                await next();
-            });
+            //app.Use(async (context, next) =>
+            //{
+            //    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self' https://localhost:5001/ style-src 'unsafe-inline'  ");
+            //    context.Response.Headers.Add("Strict-Transport-Security","max-age=31536000; includeSubDomains; preload ");
+            //    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+            //    await next();
+            //});
             app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
