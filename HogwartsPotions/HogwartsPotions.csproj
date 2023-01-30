@@ -31,8 +31,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Alchemy\" />
+	  <Folder Include="Views" />
+	  <Folder Include="Views\Alchemy\" />
     <Folder Include="Views\Home\" />
   </ItemGroup>
-
+  <ItemGroup>
+	<Content Include="Views\**\*">
+		<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	</Content>
+  </ItemGroup>
 </Project>
