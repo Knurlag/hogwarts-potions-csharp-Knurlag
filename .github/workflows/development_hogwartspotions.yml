@@ -26,7 +26,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish HogwartsPotions/HogwartsPotions.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp -r win-x64 -p:PublishWithAspNetCoreTargetManifest=false
+        run: dotnet publish HogwartsPotions/HogwartsPotions.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp /p:PublishDir=${env:DOTNET_ROOT}/HogwartsPotions/views
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
