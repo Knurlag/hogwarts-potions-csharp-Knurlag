@@ -64,9 +64,8 @@ namespace HogwartsPotions
             {
                 //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
-            services.AddMvc().AddRazorRuntimeCompilation();
             services.AddControllersWithViews().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve).AddRazorRuntimeCompilation();
             services.AddTransient<IPotionService, PotionService>();
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IIngredientService, IngredientService>();
