@@ -36,5 +36,6 @@
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</Content>
 		<Content Include="wwwroot\**" CopyToPublishDirectory="PreserveNewest" />
+		<Content Include="appsettings.json" CopyToPublishDirectory="Always" />
 	</ItemGroup>
 </Project>
