@@ -1,5 +1,4 @@
-﻿using System;
-using HogwartsPotions.Models.Enums;
+﻿using HogwartsPotions.Models.Enums;
 
 namespace HogwartsPotions.Models;
 

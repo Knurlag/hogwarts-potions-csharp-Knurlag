@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using HogwartsPotions.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 

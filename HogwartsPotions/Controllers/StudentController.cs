@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Mime;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using HogwartsPotions.Data;
-using HogwartsPotions.Helpers;
+﻿using System.Threading.Tasks;
 using HogwartsPotions.Models;
 using HogwartsPotions.Models.Entities;
 using HogwartsPotions.Models.Enums;
-using HogwartsPotions.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

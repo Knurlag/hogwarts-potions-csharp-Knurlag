@@ -1,5 +1,4 @@
-﻿using HogwartsPotions.Models;
-using HogwartsPotions.Models.Entities;
+﻿using HogwartsPotions.Models.Entities;
 
 namespace HogwartsPotions.Services.Interfaces;
 

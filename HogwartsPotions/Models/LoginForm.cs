@@ -1,6 +1,4 @@
-﻿using System;
-using HogwartsPotions.Models.Entities;
-
+﻿
 namespace HogwartsPotions.Models;
 
 public class LoginForm

@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Dynamic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HogwartsPotions.Models.Entities;
-using Microsoft.AspNetCore.Http;
-using HogwartsPotions.Data;
-using HogwartsPotions.Services;
 using HogwartsPotions.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 

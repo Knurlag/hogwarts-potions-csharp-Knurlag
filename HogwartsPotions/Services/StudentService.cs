@@ -1,11 +1,7 @@
 ﻿using System.Linq;
 using HogwartsPotions.Data;
 using HogwartsPotions.Models.Entities;
-using HogwartsPotions.Models;
-using System.Security.Cryptography;
-using System.Text;
 using HogwartsPotions.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace HogwartsPotions.Services;
 

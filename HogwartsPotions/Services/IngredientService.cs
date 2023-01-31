@@ -2,9 +2,7 @@
 using HogwartsPotions.Models.Entities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using HogwartsPotions.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace HogwartsPotions.Services;
 
