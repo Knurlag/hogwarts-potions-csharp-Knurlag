@@ -48,7 +48,7 @@ namespace HogwartsPotions
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
                 options.LoginPath = "/Student/Index";
                 options.AccessDeniedPath = "/Student/AccesDenied";
@@ -59,12 +59,12 @@ namespace HogwartsPotions
                 options.FormFieldName = "AntiForgeryField";
                 options.HeaderName = "AntiForgeryHeader";
                 options.Cookie.Name = "AntiForgeryCookie";
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSession(options =>
             {
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
             services.AddControllersWithViews().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
@@ -91,7 +91,7 @@ namespace HogwartsPotions
             }
             //app.Use(async (context, next) =>
             //{
-            //    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self' https://localhost:5001/ style-src 'unsafe-inline'  ");
+            //    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self' https://localhost:5001/ https://hogwartspotions.azurewebsites.net/ style-src 'unsafe-inline'  ");
             //    context.Response.Headers.Add("Strict-Transport-Security","max-age=31536000; includeSubDomains; preload ");
             //    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
             //    await next();
