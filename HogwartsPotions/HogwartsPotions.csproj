@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
     <StartupObject>HogwartsPotions.Program</StartupObject>
-	<EnableDefaultContentItems>false</EnableDefaultContentItems>
+	<EnableDefaultContentItems>true</EnableDefaultContentItems>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,11 +31,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Content Include="Views\**\*" CopyToPublishDirectory="PreserveNewest">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		</Content>
-		<Content Include="wwwroot\**" CopyToPublishDirectory="PreserveNewest" />
-		<Content Include="appsettings.json" CopyToPublishDirectory="Always" />
-	</ItemGroup>
 </Project>
