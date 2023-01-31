@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
     <StartupObject>HogwartsPotions.Program</StartupObject>
+	<EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,5 +35,6 @@
 		<Content Include="Views\**\*" CopyToPublishDirectory="PreserveNewest">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</Content>
+		<Content Include="wwwroot\**" CopyToPublishDirectory="PreserveNewest" />
 	</ItemGroup>
 </Project>
