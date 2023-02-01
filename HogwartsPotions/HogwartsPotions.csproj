@@ -5,6 +5,7 @@
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
     <StartupObject>HogwartsPotions.Program</StartupObject>
 	<EnableDefaultContentItems>true</EnableDefaultContentItems>
+	<GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
   </PropertyGroup>
 
   <ItemGroup>
